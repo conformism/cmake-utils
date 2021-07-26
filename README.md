@@ -15,3 +15,24 @@ You can include it in a project as Git submodule or using [CPM](https://github.c
 - [Clang-Tidy](https://clang.llvm.org/extra/clang-tidy/)
 - [ClangBuildAnalyzer](https://github.com/aras-p/ClangBuildAnalyzer)
 - LaTeX (works with XeLaTeX compiler, [minted](https://www.ctan.org/pkg/minted) & [tikz](https://www.ctan.org/pkg/pgf) packages)
+
+## Usage
+
+### With CPM
+
+```cmake
+include( CPM )
+
+CPMAddPackage(
+	NAME cmake-utils
+	GITHUB_REPOSITORY conformism/cmake-utils
+	GIT_TAG main
+	DOWNLOAD_ONLY
+	)
+
+list( APPEND CMAKE_MODULE_PATH
+	"${FETCHCONTENT_BASE_DIR}/cmake-utils-src"
+	)
+
+include( <Tool> )
+```
