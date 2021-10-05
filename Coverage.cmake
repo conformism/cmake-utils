@@ -53,13 +53,22 @@ if( COVERAGE OR CMAKE_BUILD_TYPE MATCHES Coverage )
 		endif()
 	endif()
 
+	if( COVERAGE_GLOBAL_ONLY AND NOT SONAR )
+		add_custom_target( coverage_all )
+	endif()
+
 	find_package( Catch2 3.0.0 REQUIRED )
 	if( Catch2_FOUND )
 		message( STATUS "Found Catch2: ${Catch2_VERSION}" )
 	endif()
 
-	if( COVERAGE_GLOBAL_ONLY AND NOT SONAR )
-		add_custom_target( coverage_all )
+else()
+
+	find_package( Catch2 3.0.0 QUIET )
+	if( Catch2_FOUND )
+		message( STATUS "Found Catch2: ${Catch2_VERSION}" )
+	else()
+		message( STATUS "Not found Catch2 >= ${Catch2_VERSION}: unittest targets disabled" )
 	endif()
 endif()
 
