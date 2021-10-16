@@ -10,7 +10,7 @@ OR  SANITIZER STREQUAL UBSAN
 	message( STATUS "Enabled sanitizer: ${SANITIZER}" )
 elseif( NOT SANITIZER )
 else()
-	message( ERROR " Invalid sanitizer: ${SANITIZER}" )
+	message( FATAL_ERROR "Invalid sanitizer: ${SANITIZER}" )
 endif()
 
 ################################################################################

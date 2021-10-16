@@ -38,7 +38,7 @@ function( enable_clang_build_analyzer )
 	if( CBA_TARGET )
 		get_target_property( CBA_BIN_DIR ${CBA_TARGET} BINARY_DIR )
 	else()
-		message( ERROR " enable_clang_build_analyzer() : Specify a target!" )
+		message( FATAL_ERROR "enable_clang_build_analyzer() : Specify a target!" )
 	endif()
 
 	if( BUILD_ANALYZER AND CLANG_BUILD_ANALYZER AND CMAKE_CXX_COMPILER_ID MATCHES Clang )

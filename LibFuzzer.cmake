@@ -1,6 +1,7 @@
-if( NOT CMAKE_CXX_COMPILER_ID MATCHES Clang )
-	message( ERROR " LibFuzzer is a LLVM feature: use Clang!" )
-elseif( LIBFUZZER )
+if( LIBFUZZER )
+	if( NOT CMAKE_CXX_COMPILER_ID MATCHES Clang )
+		message( FATAL_ERROR "LibFuzzer is a LLVM feature: use Clang!" )
+	endif()
 	add_custom_target( fuzz )
 endif()
 

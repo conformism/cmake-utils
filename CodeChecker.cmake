@@ -53,7 +53,7 @@ function( static_analysis_codechecker )
 		)
 
 	if( CODECHECKER_GLOBAL AND CODECHECKER_TARGET )
-		message( ERROR " static_analysis_codechecker() : Use GLOBAL or TARGET but not both!" )
+		message( FATAL_ERROR "static_analysis_codechecker() : Use GLOBAL or TARGET but not both!" )
 	elseif( CODECHECKER_GLOBAL )
 		set( TARGET_NAME
 			codechecker
@@ -63,7 +63,7 @@ function( static_analysis_codechecker )
 			${CODECHECKER_TARGET}_codechecker
 			)
 	else()
-		message( ERROR " static_analysis_codechecker() : Specify a target!" )
+		message( FATAL_ERROR "static_analysis_codechecker() : Specify a target!" )
 	endif()
 
 	if( NOT CODECHECKER_NO_CTU )
