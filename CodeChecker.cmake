@@ -124,6 +124,7 @@ function( static_analysis_codechecker )
 			# TODO Would very simplify but does not seems to work properly (bug?)
 #			${CODECHECKER_ADDITIONAL_OPTIONAL_REPORTS}
 			"${TARGET_DIR}/codechecker_reports"
+			|| ${CMAKE_COMMAND} -E true
 		)
 
 	add_custom_command( TARGET ${TARGET_NAME}
