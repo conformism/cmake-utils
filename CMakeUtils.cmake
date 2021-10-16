@@ -12,6 +12,7 @@ if( ${CMAKE_UTILS} STREQUAL * )
 		CPPCHECK
 		IWYU
 		LATEX
+		LIBFUZZER
 		LIZARD
 		SANITIZERS
 		UNCRUSTIFY
@@ -45,6 +46,9 @@ foreach( UTIL ${CMAKE_UTILS} )
 		option( COVERAGE_GLOBAL_ONLY "When calling the 'coverage' target, do not show the dependant per target reports. The counterpart is the creation of intermediate targets" OFF )
 		option( COVERAGE_GCOVR_VERBOSE "Print gcovr reports in terminal while generating sonarqube coverage reports" OFF )
 	endif()
+	if( UTIL MATCHES LIBFUZZER )
+		option( LIBFUZZER "Enable LibFuzzer" OFF )
+	endif()
 	if( UTIL MATCHES SANITIZERS )
 		set( SANITIZER
 			""
@@ -73,6 +77,8 @@ foreach( UTIL ${CMAKE_UTILS} )
 		include( IncludeWhatYouUse )
 	elseif( UTIL MATCHES LIZARD )
 		include( Lizard )
+	elseif( UTIL MATCHES LIBFUZZER ) # Depends on Sanitizers
+		include( LibFuzzer )
 	elseif( UTIL MATCHES CPPCHECK )
 		include( Cppcheck )
 	elseif( UTIL MATCHES UNCRUSTIFY )

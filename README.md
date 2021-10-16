@@ -17,6 +17,7 @@ You can include it in a project as Git submodule or using [CPM](https://github.c
 - [CodeChecker](https://github.com/Ericsson/codechecker) ([Clang-Static-Analyzer](https://clang-analyzer.llvm.org/))
 - [ClangBuildAnalyzer](https://github.com/aras-p/ClangBuildAnalyzer)
 - LaTeX (works with XeLaTeX compiler, [minted](https://www.ctan.org/pkg/minted) & [tikz](https://www.ctan.org/pkg/pgf) packages)
+- [LibFuzzer](https://www.llvm.org/docs/LibFuzzer.html)
 - Sanitizers
 - [Lcov](http://ltp.sourceforge.net/coverage/lcov.php) / [Llvm-cov](https://clang.llvm.org/docs/SourceBasedCodeCoverage.html) / [Gcovr](https://github.com/gcovr/gcovr) (works with [Catch2](https://github.com/catchorg/Catch2), with [SonarQube](https://www.sonarqube.org/) / [SonarCloud](https://sonarcloud.io) integration)
 
@@ -47,6 +48,7 @@ set( CMAKE_UTILS
 	CPPCHECK
 	IWYU
 	LATEX
+	LIBFUZZER
 	LIZARD
 	SANITIZERS
 	UNCRUSTIFY
