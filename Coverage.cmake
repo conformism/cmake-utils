@@ -1,9 +1,3 @@
-option( COVERAGE "Enable coverage for the current build type, prefer to use the Coverage build type" OFF )
-option( SONAR "The coverage target will produce SonarQube reports instead of console / HTML" OFF )
-
-option( COVERAGE_GLOBAL_ONLY "When calling the 'coverage' target, do not show the dependant per target reports. The counterpart is the creation of intermediate targets" OFF )
-option( COVERAGE_GCOVR_VERBOSE "Print gcovr reports in terminal while generating sonarqube coverage reports" OFF )
-
 if( COVERAGE OR CMAKE_BUILD_TYPE MATCHES Coverage )
 	if( CMAKE_CXX_COMPILER_ID MATCHES GNU )
 		find_program( GCOV NAMES gcov )

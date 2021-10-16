@@ -1,5 +1,3 @@
-option( BUILD_ANALYZER "Enable Clang build statistics" OFF )
-
 find_program( CLANG_BUILD_ANALYZER NAMES ClangBuildAnalyzer clang-build-analyzer )
 if( CLANG_BUILD_ANALYZER )
 	message( STATUS "Found ClangBuildAnalyzer: ${CLANG_BUILD_ANALYZER}" )
