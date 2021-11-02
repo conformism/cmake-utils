@@ -35,7 +35,7 @@ CPMAddPackage(
 	DOWNLOAD_ONLY
 	)
 
-list( APPEND CMAKE_MODULE_PATH
+list( PREPEND CMAKE_MODULE_PATH
 	"${FETCHCONTENT_BASE_DIR}/cmake-utils-src"
 	)
 
