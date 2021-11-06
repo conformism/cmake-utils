@@ -10,6 +10,7 @@ if( ${CMAKE_UTILS} STREQUAL * )
 		CODECHECKER
 		COVERAGE
 		CPPCHECK
+		DOXYGEN
 		IWYU
 		LATEX
 		LIBFUZZER
@@ -46,6 +47,10 @@ foreach( UTIL ${CMAKE_UTILS} )
 		option( COVERAGE_GLOBAL_ONLY "When calling the 'coverage' target, do not show the dependant per target reports. The counterpart is the creation of intermediate targets" OFF )
 		option( COVERAGE_GCOVR_VERBOSE "Print gcovr reports in terminal while generating sonarqube coverage reports" OFF )
 	endif()
+	if( UTIL MATCHES DOXYGEN )
+		option( DOXYGEN_MCSS "Enable m.css Doxygen reports" OFF )
+		set( MCSS_VERSION "" CACHE STRING "M.CSS git tag" )
+	endif()
 	if( UTIL MATCHES LIBFUZZER )
 		option( LIBFUZZER "Enable LibFuzzer" OFF )
 	endif()
@@ -67,6 +72,8 @@ foreach( UTIL ${CMAKE_UTILS} )
 		include( Coverage )
 	elseif( UTIL MATCHES CODECHECKER )
 		include( CodeChecker )
+	elseif( UTIL MATCHES DOXYGEN )
+		include( Doxygen )
 	elseif( UTIL MATCHES SANITIZERS )
 		include( Sanitizers )
 	elseif( UTIL MATCHES CLANG_BUILD_ANALYZER )

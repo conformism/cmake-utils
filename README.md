@@ -12,14 +12,15 @@ You can include it in a project as Git submodule or using [CPM](https://github.c
 - [IWYU](https://github.com/include-what-you-use/include-what-you-use)
 - [Uncrustify](https://github.com/uncrustify/uncrustify)
 - [Cppcheck](https://github.com/danmar/cppcheck)
+- [ClangBuildAnalyzer](https://github.com/aras-p/ClangBuildAnalyzer)
 - [Clang-Format](https://clang.llvm.org/docs/ClangFormat.html)
 - [Clang-Tidy](https://clang.llvm.org/extra/clang-tidy/)
 - [CodeChecker](https://github.com/Ericsson/codechecker) ([Clang-Static-Analyzer](https://clang-analyzer.llvm.org/))
-- [ClangBuildAnalyzer](https://github.com/aras-p/ClangBuildAnalyzer)
 - LaTeX (works with XeLaTeX compiler, [minted](https://www.ctan.org/pkg/minted) & [tikz](https://www.ctan.org/pkg/pgf) packages)
 - [LibFuzzer](https://www.llvm.org/docs/LibFuzzer.html)
 - Sanitizers
 - [Lcov](http://ltp.sourceforge.net/coverage/lcov.php) / [Llvm-cov](https://clang.llvm.org/docs/SourceBasedCodeCoverage.html) / [Gcovr](https://github.com/gcovr/gcovr) (works with [Catch2](https://github.com/catchorg/Catch2), with [SonarQube](https://www.sonarqube.org/) / [SonarCloud](https://sonarcloud.io) integration)
+- [Doxygen](https://www.doxygen.nl/index.html) (with [Coverxygen](https://github.com/psycofdj/coverxygen) and [m.css](https://mcss.mosra.cz/documentation/doxygen/) integration)
 
 ## Inclusion
 
@@ -46,6 +47,7 @@ set( CMAKE_UTILS
 	CODECHECKER
 	COVERAGE
 	CPPCHECK
+	DOXYGEN
 	IWYU
 	LATEX
 	LIBFUZZER
