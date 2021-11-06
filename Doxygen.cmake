@@ -4,44 +4,40 @@ find_program( DOT NAMES dot )
 find_program( PLANTUML NAMES plantuml )
 find_program( GENHTML NAMES genhtml )
 
-set( COVERXYGEN_COMMAND
-	${Python3_EXECUTABLE} -m coverxygen
-	)
-
-find_package( Python3 )
-execute_process(
-	COMMAND ${Python3_EXECUTABLE}
-		-m coverxygen
-		--version
-	RESULT_VARIABLE COVERXYGEN
-	OUTPUT_VARIABLE COVERXYGEN_VERSION
-	ERROR_QUIET
-	)
-
-if( DOXYGEN_MCSS )
-	include( FetchContent )
-
-	message( STATUS "Fetching m.css" )
-	FetchContent_Declare( MCSS
-		GIT_REPOSITORY "https://github.com/mosra/m.css"
-		GIT_TAG ${MCSS_VERSION}
-		)
-
-	FetchContent_Populate( MCSS )
-endif()
-
-if( NOT COVERXYGEN )
-	set( COVERXYGEN ON )
-	string( REPLACE "\n" "" COVERXYGEN_VERSION ${COVERXYGEN_VERSION} )
-	message( STATUS "Found Coverxygen: ${COVERXYGEN_VERSION}" )
-else()
-	set( COVERXYGEN OFF )
-	message( STATUS "Not found Coverxygen: dox_cov targets disabled" ) 
-endif()
-
 if( DOXYGEN )
 	message( STATUS "Found doxygen: ${DOXYGEN}" )
 	add_custom_target( dox )
+
+	find_package( Python3 )
+	execute_process(
+		COMMAND ${Python3_EXECUTABLE}
+			-m coverxygen
+			--version
+		RESULT_VARIABLE COVERXYGEN
+		OUTPUT_VARIABLE COVERXYGEN_VERSION
+		ERROR_QUIET
+		)
+
+	if( NOT COVERXYGEN )
+		set( COVERXYGEN ON )
+		string( REPLACE "\n" "" COVERXYGEN_VERSION ${COVERXYGEN_VERSION} )
+		message( STATUS "Found Coverxygen: ${COVERXYGEN_VERSION}" )
+	else()
+		set( COVERXYGEN OFF )
+		message( STATUS "Not found Coverxygen: dox_cov targets disabled" )
+	endif()
+
+	if( DOXYGEN_MCSS )
+		include( FetchContent )
+
+		message( STATUS "Fetching m.css" )
+		FetchContent_Declare( MCSS
+			GIT_REPOSITORY "https://github.com/mosra/m.css"
+			GIT_TAG ${MCSS_VERSION}
+			)
+
+		FetchContent_Populate( MCSS )
+	endif()
 else()
 	message( STATUS "Not found doxygen: dox targets disabled" )
 endif()
