@@ -36,7 +36,9 @@ function( enable_clang_build_analyzer )
 		)
 
 	if( CBA_TARGET )
-		get_target_property( CBA_BIN_DIR ${CBA_TARGET} BINARY_DIR )
+		set( TARGET_DIR
+			"${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles/${CBA_TARGET}_build_analyzer.dir"
+			)
 	else()
 		message( FATAL_ERROR "enable_clang_build_analyzer() : Specify a target!" )
 	endif()
@@ -50,12 +52,12 @@ function( enable_clang_build_analyzer )
 		add_custom_target( ${CBA_TARGET}_build_analyzer
 			COMMENT "${CBA_TARGET} Clang build statistics"
 			COMMAND ${CLANG_BUILD_ANALYZER} --all
-				"${CBA_BIN_DIR}"
-				"${CBA_BIN_DIR}/${CBA_TARGET}.build_analysis"
+				"${CBA_BIN_DIR}/CMakeFiles/${CBA_TARGET}.dir"
+				"${TARGET_DIR}/build_analysis"
 			COMMAND ${CLANG_BUILD_ANALYZER} --analyze
-				"${CBA_BIN_DIR}/${CBA_TARGET}.build_analysis"
+				"${TARGET_DIR}/build_analysis"
 			BYPRODUCTS
-				"${CBA_BIN_DIR}/${CBA_TARGET}.build_analysis"
+				"${TARGET_DIR}/build_analysis"
 			)
 		add_dependencies( ${CBA_TARGET}_build_analyzer ${CBA_TARGET} )
 		add_dependencies( build_analyzer ${CBA_TARGET} )
