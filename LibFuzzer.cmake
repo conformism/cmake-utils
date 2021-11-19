@@ -12,6 +12,7 @@ endif()
 #                      [TARGET_TO_FUZZ tgt]
 #                      [EXCLUDE_FROM_ALL]
 #                      [ARGS arg1 [arg2] ...]
+#                      )
 # [TARGET]
 #       Fuzzing target name.
 # [SOURCE]

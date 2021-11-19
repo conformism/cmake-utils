@@ -23,6 +23,7 @@ endif()
 ################################################################################
 # static_analysis_codechecker(
 #                             [TARGET target]
+#                             [GLOBAL]
 #                             [NO_CTU]
 #                             [ADDITIONAL_OPTIONAL_REPORTS dir1 [dir2] ...]
 #                             [SKIP arg1 [arg2] ...]
@@ -30,6 +31,9 @@ endif()
 #                             )
 # [TARGET]
 #       Target to analyse. Will set codechecker target name in consequences.
+# [GLOBAL]
+#       Create a global codechecker target instead of a per-target one, should
+#       be prefered to cover a whole project.
 # [NO_CTU]
 #       Disable cross translation unit analysis.
 # [ADDITIONAL_OPTIONAL_REPORTS]
@@ -37,9 +41,9 @@ endif()
 #       report-converter program. Enable report export from those tools with
 #       the CODECHECKER_REPORT option.
 # [SKIP]
-#       Specify files to analyze regarding the codechecker skipfile syntax.
+#       Specify files to analyse regarding the codechecker skipfile syntax.
 # [ARGS]
-#       Specify codechecker analyze command line arguments.
+#       Specify 'codechecker analyze' command line arguments.
 ################################################################################
 function( static_analysis_codechecker )
 	set( OPTIONS GLOBAL NO_CTU )

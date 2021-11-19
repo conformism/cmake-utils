@@ -47,9 +47,10 @@ endif()
 #         [TARGET target]
 #         [DOXYFILE file]
 #         [MCSS_CONF file]
+#         [EXCLUDE_FROM_ALL]
 #         [TARGETS_TO_DOC target1 [target2] ...]
 #         [ADDITIONAL_FILES file1 [file2] ...]
-#         [COVERXYGEN_ARGS arg1 [arg2] ...]
+#         [ARGS_COVERXYGEN arg1 [arg2] ...]
 #         )
 # [TARGET]
 #       Target name, better add '_dox' suffix.
@@ -70,14 +71,16 @@ endif()
 #       M.CSS configuration file path. Following values are required:
 #       DOXYFILE = @MCSS_DOXYFILE@
 #       @MCSS_DOXYGEN_COVERAGE_INDEX@ may be used in LINKS_NAVBAR1 or
-#       LINKS_NAVBAR1 to add a link to Doxygen coverage Lcov report.
-# [COVERXYGEN_ARGS]
+#       LINKS_NAVBAR2 to add a link to Doxygen coverage Lcov report.
+# [ARGS_COVERXYGEN]
 #       Specify Coverxygen command line arguments. '--src-dir' is required.
+# [EXCLUDE_FROM_ALL]
+#       Exclude the Doxygen target from global call to 'dox' target.
 ################################################################################
 function( doxygen )
 	set( OPTIONS EXCLUDE_FROM_ALL )
 	set( ONEVALUEARGS TARGET DOXYFILE MCSS_CONF )
-	set( MULTIVALUEARGS TARGETS_TO_DOC ADDITIONAL_FILES COVERXYGEN_ARGS )
+	set( MULTIVALUEARGS TARGETS_TO_DOC ADDITIONAL_FILES ARGS_COVERXYGEN )
 	cmake_parse_arguments( DOX
 		"${OPTIONS}"
 		"${ONEVALUEARGS}"
@@ -167,7 +170,7 @@ function( doxygen )
 						--xml-dir "${TARGET_DIR}/xml"
 						--format lcov
 						--output "${TARGET_COV_DIR}/coverage.info"
-						${DOX_COVERXYGEN_ARGS}
+						${DOX_ARGS_COVERXYGEN}
 					COMMAND genhtml
 						-q
 						"${TARGET_COV_DIR}/coverage.info"
@@ -178,7 +181,7 @@ function( doxygen )
 						--xml-dir "${TARGET_DIR}/xml"
 						--format summary
 						--output -
-						${DOX_COVERXYGEN_ARGS}
+						${DOX_ARGS_COVERXYGEN}
 					COMMENT "Perform documentation coverage, generate lcov report"
 					)
 				add_custom_command( TARGET ${TARGET_NAME}_cov
@@ -212,7 +215,7 @@ function( doxygen )
 						--xml-dir "${TARGET_DIR}/xml"
 						--format lcov
 						--output "${TARGET_COV_DIR}/coverage.info"
-						${DOX_COVERXYGEN_ARGS}
+						${DOX_ARGS_COVERXYGEN}
 					COMMAND genhtml
 						-q
 						"${TARGET_COV_DIR}/coverage.info"
@@ -223,7 +226,7 @@ function( doxygen )
 						--xml-dir "${TARGET_DIR}/xml"
 						--format summary
 						--output -
-						${DOX_COVERXYGEN_ARGS}
+						${DOX_ARGS_COVERXYGEN}
 					COMMENT "Perform documentation coverage, generate lcov report"
 					)
 				add_custom_command( TARGET ${TARGET_NAME}_cov

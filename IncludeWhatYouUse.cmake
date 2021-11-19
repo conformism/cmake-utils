@@ -13,7 +13,7 @@ endif()
 #                      [ARGS arg1 [arg2] ...]
 #                      )
 # [TARGET]
-#       Target to analyse. Every sourcce file will be analysed.
+#       Target to analyse. Every source file will be analysed.
 # [ADDITIONAL_FILES]
 #       Specify other files to analyse, headers for instance.
 # [ARGS]
