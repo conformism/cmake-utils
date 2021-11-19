@@ -17,11 +17,11 @@ else()
 endif()
 
 ################################################################################
-# static_analysis_uncrustify(
-#                            [TARGET target]
-#                            [ADDITIONAL_FILES file1 [file2] ...]
-#                            [ARGS arg1 [arg2] ...]
-#                            )
+# uncrustify(
+#            [TARGET target]
+#            [ADDITIONAL_FILES file1 [file2] ...]
+#            [ARGS arg1 [arg2] ...]
+#            )
 # [TARGET]
 #       Target to analyse. Every source file will be analysed.
 # [ADDITIONAL_FILES]
@@ -29,7 +29,7 @@ endif()
 # [ARGS]
 #       Specify command line arguments.
 ################################################################################
-function( static_analysis_uncrustify )
+function( uncrustify )
 	set( OPTIONS )
 	set( ONEVALUEARGS TARGET )
 	set( MULTIVALUEARGS ADDITIONAL_FILES ARGS )
@@ -48,7 +48,7 @@ function( static_analysis_uncrustify )
 	if( UNCRUSTIFY_TARGET )
 		get_target_property( UNCRUSTIFY_SRC ${UNCRUSTIFY_TARGET} SOURCES )
 	else()
-		message( FATAL_ERROR "static_analysis_uncrustify() : Specify a target!" )
+		message( FATAL_ERROR "uncrustify() : Specify a target!" )
 	endif()
 	foreach( ARG ${UNCRUSTIFY_ARGS} )
 		list( APPEND ALL_ARGS ${ARG} )

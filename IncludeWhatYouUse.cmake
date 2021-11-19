@@ -7,11 +7,11 @@ else()
 endif()
 
 ################################################################################
-# static_analysis_iwyu(
-#                      [TARGET target]
-#                      [ADDITIONAL_FILES file1 [file2] ...]
-#                      [ARGS arg1 [arg2] ...]
-#                      )
+# iwyu(
+#      [TARGET target]
+#      [ADDITIONAL_FILES file1 [file2] ...]
+#      [ARGS arg1 [arg2] ...]
+#      )
 # [TARGET]
 #       Target to analyse. Every source file will be analysed.
 # [ADDITIONAL_FILES]
@@ -19,7 +19,7 @@ endif()
 # [ARGS]
 #       Specify command line arguments.
 ################################################################################
-function( static_analysis_iwyu )
+function( iwyu )
 	set( OPTIONS )
 	set( ONEVALUEARGS TARGET )
 	set( MULTIVALUEARGS ADDITIONAL_FILES ARGS )
@@ -38,7 +38,7 @@ function( static_analysis_iwyu )
 	if( IWYU_TARGET )
 		get_target_property( IWYU_SRC ${IWYU_TARGET} SOURCES )
 	else()
-		message( FATAL_ERROR "static_analysis_iwyu() : Specify a target!" )
+		message( FATAL_ERROR "iwyu() : Specify a target!" )
 	endif()
 	foreach( ARG ${IWYU_ARGS} )
 		list( APPEND ALL_ARGS ${ARG} )

@@ -8,11 +8,11 @@ else()
 endif()
 
 ################################################################################
-# static_analysis_format(
-#                        [TARGET target]
-#                        [ADDITIONAL_FILES file1 [file2] ...]
-#                        [ARGS arg1 [arg2] ...]
-#                        )
+# clang_format(
+#              [TARGET target]
+#              [ADDITIONAL_FILES file1 [file2] ...]
+#              [ARGS arg1 [arg2] ...]
+#              )
 # [TARGET]
 #       Target to analyse. Every sourcce file will be analysed.
 # [ADDITIONAL_FILES]
@@ -20,7 +20,7 @@ endif()
 # [ARGS]
 #       Specify command line arguments.
 ################################################################################
-function( static_analysis_format )
+function( clang_format )
 	set( OPTIONS )
 	set( ONEVALUEARGS TARGET )
 	set( MULTIVALUEARGS ADDITIONAL_FILES ARGS )
@@ -44,7 +44,7 @@ function( static_analysis_format )
 	if( FORMAT_TARGET )
 		get_target_property( FORMAT_SRC ${FORMAT_TARGET} SOURCES )
 	else()
-		message( FATAL_ERROR "static_analysis_format() : Specify a target!" )
+		message( FATAL_ERROR "clang_format() : Specify a target!" )
 	endif()
 	foreach( ARG ${FORMAT_ARGS} )
 		list( APPEND ALL_ARGS ${ARG} )

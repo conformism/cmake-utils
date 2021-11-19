@@ -96,7 +96,7 @@ enable_clang_build_analyzer(
 ### ClangFormat
 
 ```cmake
-static_analysis_format(
+clang_format(
 	TARGET <target>
 	ADDITIONAL_FILES
 		<file1>
@@ -114,7 +114,7 @@ static_analysis_format(
 ### ClangTidy
 
 ```cmake
-static_analysis_tidy(
+clang_tidy(
 	TARGET <target>
 	ADDITIONAL_FILES
 		<file1>
@@ -132,7 +132,7 @@ static_analysis_tidy(
 ### CodeChecker
 
 ```cmake
-static_analysis_codechecker(
+codechecker(
 	TARGET <target>
 	GLOBAL
 	NO_CTU
@@ -182,7 +182,7 @@ coverage_global()
 ### Cppcheck
 
 ```cmake
-static_analysis_cppcheck(
+cppcheck(
 	TARGET <target>
 	ADDITIONAL_FILES
 		<file1>
@@ -237,7 +237,7 @@ doxygen(
 ### IncludeWhatYouUse
 
 ```cmake
-static_analysis_iwyu(
+iwyu(
 	TARGET <target>
 	ADDITIONAL_FILES
 		<file1>
@@ -306,7 +306,7 @@ add_libfuzzer_target(
 ### Lizard
 
 ```cmake
-static_analysis_lizard(
+lizard(
 	TARGET <target>
 	ADDITIONAL_FILES
 		<file1>
@@ -334,7 +334,7 @@ enable_sanitizers(
 ### Uncrustify
 
 ```cmake
-static_analysis_uncrustify(
+uncrustify(
 	TARGET <target>
 	ADDITIONAL_FILES
 		<file1>

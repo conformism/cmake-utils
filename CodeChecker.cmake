@@ -21,14 +21,14 @@ if( CODECHECKER_REPORT )
 endif()
 
 ################################################################################
-# static_analysis_codechecker(
-#                             [TARGET target]
-#                             [GLOBAL]
-#                             [NO_CTU]
-#                             [ADDITIONAL_OPTIONAL_REPORTS dir1 [dir2] ...]
-#                             [SKIP arg1 [arg2] ...]
-#                             [ARGS arg1 [arg2] ...]
-#                             )
+# codechecker(
+#             [TARGET target]
+#             [GLOBAL]
+#             [NO_CTU]
+#             [ADDITIONAL_OPTIONAL_REPORTS dir1 [dir2] ...]
+#             [SKIP arg1 [arg2] ...]
+#             [ARGS arg1 [arg2] ...]
+#             )
 # [TARGET]
 #       Target to analyse. Will set codechecker target name in consequences.
 # [GLOBAL]
@@ -45,7 +45,7 @@ endif()
 # [ARGS]
 #       Specify 'codechecker analyze' command line arguments.
 ################################################################################
-function( static_analysis_codechecker )
+function( codechecker )
 	set( OPTIONS GLOBAL NO_CTU )
 	set( ONEVALUEARGS TARGET )
 	set( MULTIVALUEARGS SKIP ARGS ADDITIONAL_OPTIONAL_REPORTS )
@@ -57,7 +57,7 @@ function( static_analysis_codechecker )
 		)
 
 	if( CODECHECKER_GLOBAL AND CODECHECKER_TARGET )
-		message( FATAL_ERROR "static_analysis_codechecker() : Use GLOBAL or TARGET but not both!" )
+		message( FATAL_ERROR "codechecker() : Use GLOBAL or TARGET but not both!" )
 	elseif( CODECHECKER_GLOBAL )
 		set( TARGET_NAME
 			codechecker
@@ -67,7 +67,7 @@ function( static_analysis_codechecker )
 			${CODECHECKER_TARGET}_codechecker
 			)
 	else()
-		message( FATAL_ERROR "static_analysis_codechecker() : Specify a target!" )
+		message( FATAL_ERROR "codechecker() : Specify a target!" )
 	endif()
 
 	if( NOT CODECHECKER_NO_CTU )

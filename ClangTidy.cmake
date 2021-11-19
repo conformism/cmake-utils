@@ -8,11 +8,11 @@ else()
 endif()
 
 ################################################################################
-# static_analysis_tidy(
-#                      [TARGET target]
-#                      [ADDITIONAL_FILES file1 [file2] ...]
-#                      [ARGS arg1 [arg2] ...]
-#                      )
+# clang_tidy(
+#            [TARGET target]
+#            [ADDITIONAL_FILES file1 [file2] ...]
+#            [ARGS arg1 [arg2] ...]
+#            )
 # [TARGET]
 #       Target to analyse. Every sourcce file will be analysed.
 # [ADDITIONAL_FILES]
@@ -20,7 +20,7 @@ endif()
 # [ARGS]
 #       Specify command line arguments.
 ################################################################################
-function( static_analysis_tidy )
+function( clang_tidy )
 	set( OPTIONS )
 	set( ONEVALUEARGS TARGET )
 	set( MULTIVALUEARGS ADDITIONAL_FILES ARGS )
@@ -44,7 +44,7 @@ function( static_analysis_tidy )
 	if( TIDY_TARGET )
 		get_target_property( TIDY_SRC ${TIDY_TARGET} SOURCES )
 	else()
-		message( FATAL_ERROR "static_analysis_tidy() : Specify a target!" )
+		message( FATAL_ERROR "clang_tidy() : Specify a target!" )
 	endif()
 	foreach( ARG ${TIDY_ARGS} )
 		list( APPEND ALL_ARGS ${ARG} )

@@ -7,11 +7,11 @@ else()
 endif()
 
 ################################################################################
-# static_analysis_cppcheck(
-#                          [TARGET target]
-#                          [ADDITIONAL_FILES file1 [file2] ...]
-#                          [ARGS arg1 [arg2] ...]
-#                          )
+# cppcheck(
+#          [TARGET target]
+#          [ADDITIONAL_FILES file1 [file2] ...]
+#          [ARGS arg1 [arg2] ...]
+#          )
 # [TARGET]
 #       Target to analyse. Every source file will be analysed.
 # [ADDITIONAL_FILES]
@@ -19,7 +19,7 @@ endif()
 # [ARGS]
 #       Specify command line arguments.
 ################################################################################
-function( static_analysis_cppcheck )
+function( cppcheck )
 	set( OPTIONS )
 	set( ONEVALUEARGS TARGET )
 	set( MULTIVALUEARGS ADDITIONAL_FILES ARGS )
@@ -39,7 +39,7 @@ function( static_analysis_cppcheck )
 		get_target_property( CPPCHECK_SRC ${CPPCHECK_TARGET} SOURCES )
 		get_target_property( CPPCHECK_STD ${CPPCHECK_TARGET} CXX_STANDARD )
 	else()
-		message( FATAL_ERROR "static_analysis_cppcheck() : Specify a target!" )
+		message( FATAL_ERROR "cppcheck() : Specify a target!" )
 	endif()
 	foreach( ARG ${CPPCHECK_ARGS} )
 		list( APPEND ALL_ARGS ${ARG} )

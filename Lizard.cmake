@@ -7,11 +7,11 @@ else()
 endif()
 
 ################################################################################
-# static_analysis_lizard(
-#                        [TARGET target]
-#                        [ADDITIONAL_FILES file1 [file2] ...]
-#                        [ARGS arg1 [arg2] ...]
-#                        )
+# lizard(
+#        [TARGET target]
+#        [ADDITIONAL_FILES file1 [file2] ...]
+#        [ARGS arg1 [arg2] ...]
+#        )
 # [TARGET]
 #       Target to analyse. Every sourcce file will be analysed.
 # [ADDITIONAL_FILES]
@@ -19,7 +19,7 @@ endif()
 # [ARGS]
 #       Specify command line arguments.
 ################################################################################
-function( static_analysis_lizard )
+function( lizard )
 	set( OPTIONS )
 	set( ONEVALUEARGS TARGET )
 	set( MULTIVALUEARGS ADDITIONAL_FILES ARGS )
@@ -38,7 +38,7 @@ function( static_analysis_lizard )
 	if( LIZARD_TARGET )
 		get_target_property( LIZARD_SRC ${LIZARD_TARGET} SOURCES )
 	else()
-		message( FATAL_ERROR "static_analysis_lizard() : Specify a target!" )
+		message( FATAL_ERROR "lizard() : Specify a target!" )
 	endif()
 	foreach( ARG ${LIZARD_ARGS} )
 		list( APPEND ALL_ARGS ${ARG} )
