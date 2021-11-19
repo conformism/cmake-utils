@@ -10,7 +10,6 @@ find_package( LATEX COMPONENTS XELATEX )
 #                    [REGISTER_TO var]
 #                    [DEPENDS file1 [file2] ...]
 #                    [SHELL_ESCAPE]
-#                    [VERBOSE]
 #                    [MINTED]
 #                    )
 # [OUTPUT]
@@ -46,8 +45,6 @@ find_package( LATEX COMPONENTS XELATEX )
 #       a rebuild on additional input files' timestamp.
 # [SHELL_ESCAPE]
 #       Append "--shell-escape" to the LaTex compiler.
-# [VERBOSE]
-#       Show LaTex compiler output messages.
 # [MINTED]
 #       Use it only if you use the LaTex package Minted AND you override
 #       DESTINATION. Defines \mintedoutputdir to set the Minted package argument
@@ -55,7 +52,7 @@ find_package( LATEX COMPONENTS XELATEX )
 #       "\usepackage[outputdir=\mintedoutputdir]{minted}"
 ################################################################################
 function( compile_latex_file NAME )
-	set( OPTIONS VERBOSE SHELL_ESCAPE MINTED )
+	set( OPTIONS SHELL_ESCAPE MINTED )
 	set( ONEVALUEARGS DESTINATION SOURCE TEXINPUTS REGISTER_TO )
 	set( MULTIVALUEARGS OUTPUT SUBDIRS DEPENDS )
 	cmake_parse_arguments( LATEX
