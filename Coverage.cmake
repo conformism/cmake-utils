@@ -72,8 +72,6 @@ endif()
 #          [TARGET_TO_RUN target]
 #          [TARGETS_TO_COVER target1 [target2] ...]
 #          [EXCLUDE_FROM_ALL]
-#          [ARGS_LCOV arg1 [arg2] ...] 
-#          [ARGS_LVVM_COV arg1 [arg2] ...] 
 #          [ARGS_GCOVR arg1 [arg2] ...] 
 #          )
 # [TARGET_TO_RUN]
@@ -84,10 +82,6 @@ endif()
 # [EXCLUDE_FROM_ALL]
 #       Exclude the coverage target from global reports produced by 'coverage'
 #       target.
-# [ARGS_LCOV]
-#       .
-# [ARGS_LVVM_COV]
-#       .
 # [ARGS_GCOVR]
 #       Arguments to pass to gcovr (used for sonarqube reports), especially
 #       usefull to specify source coverage filters ('-e' and '-f') as this is
@@ -96,7 +90,7 @@ endif()
 function( coverage )
 	set( OPTIONS EXCLUDE_FROM_ALL )
 	set( ONEVALUEARGS TARGET_TO_RUN )
-	set( MULTIVALUEARGS TARGETS_TO_COVER ARGS_LCOV ARGS_LLVM_COV ARGS_GCOVR )
+	set( MULTIVALUEARGS TARGETS_TO_COVER ARGS_GCOVR )
 	cmake_parse_arguments( COVERAGE
 		"${OPTIONS}"
 		"${ONEVALUEARGS}"
