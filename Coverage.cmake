@@ -341,7 +341,7 @@ function( coverage_global )
 					-q
 					${ARGS_TARGETS_DATA_FILES}
 					-o "${COVERAGE_DIR}/coverage.info"
-
+					--rc lcov_branch_coverage=1
 				COMMAND ${GENHTML}
 					-q
 					"${COVERAGE_DIR}/coverage.info"
