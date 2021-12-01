@@ -78,7 +78,7 @@ For more informations about those options, take a look to the utils detail parag
 | `MCSS_VERSION`           | ` `   | M.CSS git tag                                                                                                                             | `DOXYGEN`  |
 | `LATEX_VERBOSE`          | `OFF` | Show LaTeX compiler output messages.                                                                                                      | `LATEX`    |
 | `LIBFUZZER`              | `OFF` | Enable LibFuzzer                                                                                                                         | `LIBFUZZER` |
-| `UNCRUSTIFY_DIFF`        | `ON`  | Show diff of the suggested modifications while running uncristify                                                                       | `UNCRUSTIFY` |
+| `UNCRUSTIFY_DIFF`        | `ON`  | Show diff of the suggested modifications while running uncrustify                                                                       | `UNCRUSTIFY` |
 | `SANITIZER`              | ` `   | Compile with a sanitizer. Options are: `ASAN`, `AUBSAN`, `CFISAN`, `LSAN`, `MSAN`, `MWOSAN`, `TSAN`, `UBSAN`                | `SANITIZERS` `LIBFUZZER` |
 
 ## Utils API
