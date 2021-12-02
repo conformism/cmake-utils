@@ -262,6 +262,14 @@ function( coverage )
 						--exclude-throw-branches
 					)
 			endif()
+			add_custom_command( TARGET ${TARGET_NAME}
+				POST_BUILD
+				COMMENT	"${TARGET_TO_RUN_DIR}/sonarqube_report_test.xml"
+				)
+			add_custom_command( TARGET ${TARGET_NAME}
+				POST_BUILD
+				COMMENT "${TARGET_DIR}/sonarqube_report_coverage.xml"
+				)
 
 		elseif( CMAKE_CXX_COMPILER_ID MATCHES Clang AND NOT SONAR )
 
