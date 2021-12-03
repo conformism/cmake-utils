@@ -8,6 +8,10 @@ OR  SANITIZER STREQUAL TSAN
 OR  SANITIZER STREQUAL UBSAN
 	)
 	message( STATUS "Enabled sanitizer: ${SANITIZER}" )
+
+	if( NOT CMAKE_CXX_COMPILER_ID MATCHES Clang )
+		message( WARNING "Better use Clang for full sanitizers support" )
+	endif()
 elseif( NOT SANITIZER )
 else()
 	message( FATAL_ERROR "Invalid sanitizer: ${SANITIZER}" )
