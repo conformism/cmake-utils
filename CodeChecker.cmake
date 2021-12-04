@@ -57,7 +57,7 @@ function( codechecker )
 		)
 
 	if( CODECHECKER_GLOBAL AND CODECHECKER_TARGET )
-		message( FATAL_ERROR "codechecker() : Use GLOBAL or TARGET but not both!" )
+		message( FATAL_ERROR "Use GLOBAL or TARGET but not both!" )
 	elseif( CODECHECKER_GLOBAL )
 		set( TARGET_NAME
 			codechecker
@@ -67,7 +67,7 @@ function( codechecker )
 			${CODECHECKER_TARGET}_codechecker
 			)
 	else()
-		message( FATAL_ERROR "codechecker() : Specify a target!" )
+		message( FATAL_ERROR "Specify a target!" )
 	endif()
 
 	if( NOT CODECHECKER_NO_CTU )

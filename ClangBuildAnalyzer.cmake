@@ -40,7 +40,7 @@ function( enable_clang_build_analyzer )
 			"${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles/${CBA_TARGET}_build_analyzer.dir"
 			)
 	else()
-		message( FATAL_ERROR "enable_clang_build_analyzer() : Specify a target!" )
+		message( FATAL_ERROR "Specify a target!" )
 	endif()
 
 	if( BUILD_ANALYZER AND CLANG_BUILD_ANALYZER AND CMAKE_CXX_COMPILER_ID MATCHES Clang )

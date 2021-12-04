@@ -96,7 +96,7 @@ function( doxygen )
 			if( ${N_TARGETS} EQUAL 1 )
 				set( TARGET_NAME ${DOX_TARGETS_TO_DOC}_dox )
 			else()
-				message( FATAL_ERROR "doxygen() : Specify a target name!" )
+				message( FATAL_ERROR "Specify a target name!" )
 			endif()
 		endif()
 

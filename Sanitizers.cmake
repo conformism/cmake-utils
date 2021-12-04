@@ -35,6 +35,10 @@ function( enable_sanitizers )
 		${ARGN}
 		)
 
+	if( NOT SANITIZERS_TARGET )
+		message( FATAL_ERROR "Specify a target!" )
+	endif()
+
 	if( SANITIZER )
 		list( APPEND SANITIZERS_FLAGS
 			-fno-omit-frame-pointer
