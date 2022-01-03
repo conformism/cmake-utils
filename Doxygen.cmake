@@ -166,18 +166,20 @@ function( doxygen )
 			if( COVERXYGEN AND GENHTML )
 				add_custom_target( ${TARGET_NAME}_cov
 					DEPENDS "${TARGET_DIR}/xml/index.xml"
-					COMMAND python3 -m coverxygen
+					COMMAND ${Python3_EXECUTABLE}
+						-m coverxygen
 						--xml-dir "${TARGET_DIR}/xml"
 						--format lcov
 						--output "${TARGET_COV_DIR}/coverage.info"
 						${DOX_ARGS_COVERXYGEN}
-					COMMAND genhtml
+					COMMAND ${GENHTML}
 						-q
 						"${TARGET_COV_DIR}/coverage.info"
 						-o "${TARGET_COV_DIR}/html"
 						--no-branch-coverage
 						--no-function-coverage
-					COMMAND python3 -m coverxygen
+					COMMAND ${Python3_EXECUTABLE}
+						-m coverxygen
 						--xml-dir "${TARGET_DIR}/xml"
 						--format summary
 						--output -
@@ -211,18 +213,20 @@ function( doxygen )
 			if( COVERXYGEN AND GENHTML )
 				add_custom_target( ${TARGET_NAME}_cov
 					DEPENDS "${TARGET_DIR}/xml/index.xml"
-					COMMAND python3 -m coverxygen
+					COMMAND ${Python3_EXECUTABLE}
+						-m coverxygen
 						--xml-dir "${TARGET_DIR}/xml"
 						--format lcov
 						--output "${TARGET_COV_DIR}/coverage.info"
 						${DOX_ARGS_COVERXYGEN}
-					COMMAND genhtml
+					COMMAND ${GENHTML}
 						-q
 						"${TARGET_COV_DIR}/coverage.info"
 						-o "${TARGET_COV_DIR}/html"
 						--no-branch-coverage
 						--no-function-coverage
-					COMMAND python3 -m coverxygen
+					COMMAND ${Python3_EXECUTABLE}
+						-m coverxygen
 						--xml-dir "${TARGET_DIR}/xml"
 						--format summary
 						--output -
