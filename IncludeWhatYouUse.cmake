@@ -1,4 +1,4 @@
-find_program( IWYU NAMES iwyu )
+find_program( IWYU NAMES iwyu include-what-you-use )
 if( IWYU )
 	message( STATUS "Found IWYU: ${IWYU}" )
 	add_custom_target( iwyu )
