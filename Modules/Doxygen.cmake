@@ -28,15 +28,34 @@ if( DOXYGEN )
 	endif()
 
 	if( DOXYGEN_MCSS )
-		include( FetchContent )
-
-		message( STATUS "Fetching m.css" )
-		FetchContent_Declare( MCSS
-			GIT_REPOSITORY "https://github.com/mosra/m.css"
-			GIT_TAG ${MCSS_VERSION}
+		find_program( MCSS_EXECUTABLE
+			NAMES doxygen.py
+			PATHS
+				/opt/m.css/documentation
+				/opt/m_css/documentation
+				/opt/mcss/documentation
 			)
 
-		FetchContent_Populate( MCSS )
+		if( MCSS_EXECUTABLE )
+			message( STATUS "Found m.css: ${MCSS_EXECUTABLE}" )
+			if( MCSS_VERSION )
+				message( STATUS "A m.css version was set but won't be used as a local one is present" )
+			endif()
+		else()
+			include( FetchContent )
+
+			message( STATUS "Fetching m.css" )
+			FetchContent_Declare( MCSS
+				GIT_REPOSITORY "https://github.com/mosra/m.css"
+				GIT_TAG ${MCSS_VERSION}
+				)
+
+			FetchContent_Populate( MCSS )
+
+			set( MCSS_EXECUTABLE
+				"${FETCHCONTENT_BASE_DIR}/mcss-src/documentation/doxygen.py"
+				)
+		endif()
 	endif()
 else()
 	message( STATUS "Not found doxygen: dox targets disabled" )
@@ -151,7 +170,7 @@ function( doxygen )
 					${SRC}
 					"${TARGET_DIR}/Doxyfile"
 					"${TARGET_DIR}/mcss.conf.py"
-				COMMAND "${FETCHCONTENT_BASE_DIR}/mcss-src/documentation/doxygen.py"
+				COMMAND ${MCSS_EXECUTABLE}
 					"${TARGET_DIR}/mcss.conf.py"
 				COMMENT "Generate Doxygen m.css documentation"
 				)
