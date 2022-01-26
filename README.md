@@ -35,7 +35,7 @@ CPMAddPackage(
 	)
 
 list( PREPEND CMAKE_MODULE_PATH
-	"${FETCHCONTENT_BASE_DIR}/cmake-utils-src"
+	"${FETCHCONTENT_BASE_DIR}/cmake-utils-src/Modules"
 	)
 
 set( CMAKE_UTILS
