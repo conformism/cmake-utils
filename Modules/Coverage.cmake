@@ -183,6 +183,7 @@ function( coverage )
 				COMMAND ${LCOV} -r
 					"${TARGET_DIR}/coverage.info"
 					'/usr/*'
+					'/nix/store/*'
 					-o "${TARGET_DIR}/coverage.info"
 					--rc lcov_branch_coverage=1
 					-q
