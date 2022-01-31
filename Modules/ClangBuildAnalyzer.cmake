@@ -12,6 +12,8 @@ if( CLANG_BUILD_ANALYZER )
 			BYPRODUCTS
 				"${CMAKE_BINARY_DIR}/build_analysis"
 			)
+	elseif( BUILD_ANALYZER AND NOT CMAKE_CXX_COMPILER_ID MATCHES Clang )
+		message( FATAL_ERROR "ClangBuildAnalyzer relies on Clang: use Clang!" )
 	endif()
 else()
 	message( STATUS "Not found ClangBuildAnalyzer: build_analyzer targets disabled" )
