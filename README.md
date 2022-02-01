@@ -1,3 +1,8 @@
+[![Liberapay patrons](https://img.shields.io/liberapay/patrons/thomaslepoix.svg?logo=liberapay)](https://liberapay.com/thomaslepoix/donate)
+[![License](https://img.shields.io/github/license/conformism/cmake-utils)](LICENSE)
+[![Version](https://img.shields.io/github/v/release/conformism/cmake-utils)](https://github.com/Open-RFlab/openemsh/releases/latest)
+[![nix](https://img.shields.io/static/v1?logo=nixos&logoColor=white&label=&message=Built%20with%20Nix&color=41439a)](https://builtwithnix.org/)
+
 # CMake Utils
 
 ## Description
