@@ -10,7 +10,6 @@
 , need-cppcheck ? false
 , need-doxygen ? false
 , need-include-what-you-use ? false
-, need-latex ? false
 , need-lizard ? false
 , need-m-css ? false
 , need-sonar ? false
@@ -78,10 +77,6 @@ let
     if need-all || need-sonar
     then pkgs.sonar-scanner-cli
     else [];
-  texlive = need-all: need-latex:
-    if need-all || need-latex
-    then pkgs.texlive.combined.scheme-small
-    else [];
   uncrustify = need-all: need-uncrustify:
     if need-all || need-uncrustify
     then callPackage ./nix/uncrustify.nix {}
@@ -108,7 +103,6 @@ in stdenvNoCC.mkDerivation {
     (llvm need-all need-coverage)
     (m-css need-all need-doxygen need-m-css)
     (sonar-scanner-cli need-all need-sonar)
-    (texlive need-all need-latex)
     (uncrustify need-all need-uncrustify)
   ];
 
