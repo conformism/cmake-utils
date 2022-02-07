@@ -5,13 +5,12 @@
 }:
 
 uncrustify.overrideAttrs (old: rec {
-  name = "${old.product}-${version}";
   version = "0.74.0";
 
   src = fetchFromGitHub {
-    owner = old.product;
-    repo = old.product;
-    rev = name;
+    owner = old.pname;
+    repo = old.pname;
+    rev = "${old.pname}-${version}";
     sha256 = "sha256-rctITiwWLdM6QY/vpdbWWs0rqFe/ww3c0v7L/ivciGw=";
   };
 
