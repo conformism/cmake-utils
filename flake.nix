@@ -1,6 +1,8 @@
 {
   description = "CMake Utilities.";
 
+  nixConfig.bash-prompt-suffix = "(cmake-utils) ";
+
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/21.11";
 
