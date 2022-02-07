@@ -17,16 +17,16 @@ buildPythonPackage rec {
   doCheck = false;
 
   propagatedBuildInputs = [
-    mypy-extensions
     alembic
-    sqlalchemy
+    clang
+    GitPython
+    lxml
+    mypy-extensions
+    portalocker
     psutil
     pyyaml
-    portalocker
-    GitPython
+    sqlalchemy
     thrift
-    lxml
-    clang
   ];
 
   prePatch = ''
