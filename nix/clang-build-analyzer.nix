@@ -2,7 +2,7 @@
 , lib
 , fetchFromGitHub
 , cmake
-, llvmPackages_13
+, clang
 }:
 
 stdenv.mkDerivation {
@@ -16,7 +16,7 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ cmake ];
-  propagatedBuildInputs = [ llvmPackages_13.clang ];
+  propagatedBuildInputs = [ clang ];
 
   meta = {
     homepage = "https://github.com/aras-p/ClangBuildAnalyzer";

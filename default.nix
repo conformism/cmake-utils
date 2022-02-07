@@ -20,13 +20,15 @@
 with pkgs;
 
 let
+  llvmPackages = llvmPackages_13;
+  clang = llvmPackages.clang;
   catch3 = need-all: need-coverage: need-catch3:
     if need-all || need-coverage || need-catch3
     then callPackage ./nix/catch3.nix {}
     else [];
   clang-build-analyzer = need-all: need-clang-buil-analyzer:
     if need-all || need-clang-build-analyzer
-    then callPackage ./nix/clang-build-analyzer.nix {}
+    then callPackage ./nix/clang-build-analyzer.nix { inherit clang; }
     else [];
   clang-tools = need-all: need-clang-tools:
     if need-all || need-clang-tools
@@ -34,7 +36,7 @@ let
     else [];
   codechecker = need-all: need-codechecker:
     if need-all || need-codechecker
-    then callPackage ./nix/codechecker.nix {}
+    then callPackage ./nix/codechecker.nix { inherit clang; }
     else [];
   coverxygen = need-all: need-doxygen:
     if need-all || need-doxygen
@@ -66,7 +68,7 @@ let
     else [];
   llvm = need-all: need-coverage:
     if need-all || need-coverage
-    then pkgs.llvmPackages_13.llvm
+    then llvmPackages.llvm
     else [];
   m-css = need-all: need-doxygen: need-m-css:
     if need-all || (need-doxygen && need-m-css)
@@ -93,11 +95,10 @@ in stdenvNoCC.mkDerivation {
 
   buildInputs = [
     git
-    llvmPackages_13.clang
+    clang
     (catch3 need-all need-coverage need-catch3)
     (clang-build-analyzer need-all need-clang-build-analyzer)
-    (clang-tools need-all need-clang-tools)
-#    (codechecker need-all need-codechecker)
+    (codechecker need-all need-codechecker)
     (coverxygen need-all need-doxygen)
     (cppcheck need-all need-cppcheck)
     (gcovr need-all need-coverage)
