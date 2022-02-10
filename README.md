@@ -9,7 +9,7 @@
 
 This is a collection of CMake utilities to include in a C++ project a set of usefull development tools.
 
-You can include it in a project as Git submodule or using [CPM](https://github.com/cpm-cmake/CPM.cmake).
+You can include it using [Nix](https://nixos.org/), [CPM](https://github.com/cpm-cmake/CPM.cmake), Git submodule or system wide installation. Nix is the recommended way as it manage the installation of the tools themselves (which are usually either not in the distro repos or outdated).
 
 ## Included tools
 
@@ -27,7 +27,99 @@ You can include it in a project as Git submodule or using [CPM](https://github.c
 - [Lcov](http://ltp.sourceforge.net/coverage/lcov.php) / [Llvm-cov](https://clang.llvm.org/docs/SourceBasedCodeCoverage.html) / [Gcovr](https://github.com/gcovr/gcovr) (works with [Catch2](https://github.com/catchorg/Catch2), with [SonarQube](https://www.sonarqube.org/) / [SonarCloud](https://sonarcloud.io) integration)
 - [Doxygen](https://www.doxygen.nl/index.html) (with [Coverxygen](https://github.com/psycofdj/coverxygen) and [m.css](https://mcss.mosra.cz/documentation/doxygen/) integration)
 
-## Inclusion with CPM
+## Inclusion
+
+### With Nix (recommended)
+
+You can select the dependencies you need by setting the corresponding `need-<tool>` flag to `true`, except for LaTeX due to the particularity explained [here](https://github.com/NixOS/nixpkgs/blob/master/doc/languages-frameworks/texlive.section.md), you have to declare yourself your LaTeX dependency. XeLaTeX required by the CMakeUtils module is in the `scheme-small` package and better.
+
+You can also depend on a different set of tools between regular build and development shell as on the sample below.
+
+- `flake.nix`
+
+```nix
+{
+  inputs = {
+    nixpkgs.url = "github:NixOS/nixpkgs";
+
+    utils.url = "github:numtide/flake-utils";
+    utils.inputs.nixpkgs.follows = "nixpkgs";
+
+    cmake-utils-src.url = "github:conformism/cmake-utils";
+  };
+
+  outputs = { self, nixpkgs, cmake-utils-src, ... }@inputs:
+    inputs.utils.lib.eachDefaultSystem (system:
+    let
+      pkgs = import nixpkgs { inherit system; };
+
+      cmake-utils = import cmake-utils-src {
+        inherit pkgs;
+        need-catch3 = true;
+        need-clang-build-analyzer = true;
+        need-clang-tools = true;
+        need-codechecker = true;
+        need-coverage = true;
+        need-cppcheck = true;
+        need-doxygen = true;
+        need-include-what-you-use = true;
+        need-lizard = true;
+        need-m-css = true;
+        need-sonar = true;
+        need-uncrustify = true;
+      };
+
+      cmake-utils-dev = import cmake-utils-src {
+        inherit pkgs;
+        need-all = true;
+      };
+
+      this-package = pkgs.callPackage ./default.nix {
+        inherit pkgs cmake-utils;
+      };
+
+    in {
+      devShell = pkgs.mkShell {
+        inputsFrom = [
+          this-package
+          cmake-utils-dev
+        ];
+      };
+
+      defaultPackage = this-package;
+    });
+}
+```
+
+- `default.nix`
+
+```nix
+{ lib
+, pkgs ? import <nixpkgs> {}
+, cmake-utils
+}:
+
+with pkgs;
+
+let
+  texlive = pkgs.texlive.combine {
+    inherit (pkgs.texlive) scheme-small standalone pgfplots;
+  };
+
+in stdenv.mkDerivation {
+  src = ./.;
+
+  nativeBuildInputs = [
+    cmake
+    cmake-utils
+    texlive
+  ];
+}
+```
+
+### With CPM
+
+- `CMakeLists.txt`
 
 ```cmake
 include( CPM )
@@ -40,8 +132,41 @@ CPMAddPackage(
 	)
 
 list( PREPEND CMAKE_MODULE_PATH
-	"${FETCHCONTENT_BASE_DIR}/cmake-utils-src/Modules"
+	"${FETCHCONTENT_BASE_DIR}/cmake-utils-src"
 	)
+```
+
+### As Git submodule
+
+- `CMakeLists.txt`
+
+```cmake
+list( PREPEND CMAKE_MODULE_PATH
+	"${CMAKE_SOURCE_DIR}/<3rd_party>/cmake-utils"
+	)
+```
+
+### Using system wide installation
+
+- Install CMakeUtils
+
+```sh
+sudo make install    # uninstall target also exist.
+```
+
+- Download [m.css](https://github.com/mosra/m.css) if you need it
+
+```sh
+cd /opt
+sudo git clone https://github.com/mosra/m.css
+```
+
+### And then
+
+- `CMakeLists.txt`
+
+```cmake
+find_package( CMakeUtils )
 
 set( CMAKE_UTILS
 	CLANG_BUILD_ANALYZER
