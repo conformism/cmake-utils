@@ -62,7 +62,7 @@ else()
 	if( Catch2_FOUND )
 		message( STATUS "Found Catch2: ${Catch2_VERSION}" )
 	else()
-		message( STATUS "Not found Catch2 >= ${Catch2_VERSION}: unittest targets disabled" )
+		message( STATUS "Not found Catch2 >= 3.0.0: unittest targets disabled" )
 	endif()
 endif()
 
@@ -380,12 +380,10 @@ function( coverage_global )
 					)
 			endforeach()
 
-
 			add_custom_target( coverage
 				COMMAND ${LLVM_PROFDATA} merge
 					${COVERAGE_TARGETS_DATA_FILES}
 					-o "${COVERAGE_DIR}/coverage.profdata"
-
 				COMMAND ${LLVM_COV} report
 					${COVERAGE_TARGETS_OBJ_FILES}
 					-instr-profile="${COVERAGE_DIR}/coverage.profdata"
