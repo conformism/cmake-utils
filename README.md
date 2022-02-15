@@ -131,7 +131,7 @@ CPMAddPackage(
 	DOWNLOAD_ONLY
 	)
 
-list( PREPEND CMAKE_MODULE_PATH
+set( CMakeUtils_DIR
 	"${FETCHCONTENT_BASE_DIR}/cmake-utils-src"
 	)
 ```
