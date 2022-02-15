@@ -85,8 +85,7 @@ unset( COVERAGE_TARGETS CACHE )
 #       target.
 # [ARGS_GCOVR]
 #       Arguments to pass to gcovr (used for sonarqube reports), especially
-#       usefull to specify source coverage filters ('-e' and '-f') as this is
-#       not automatically done as for lcov and llvm-cov.
+#       usefull to specify source coverage filters ('-e' and '-f').
 ################################################################################
 function( coverage )
 	set( OPTIONS EXCLUDE_FROM_ALL )
@@ -109,12 +108,11 @@ function( coverage )
 			if( CMAKE_CXX_COMPILER_ID MATCHES GNU AND NOT SONAR )
 				list( APPEND TARGETS_TO_COVER_DIRS
 					-d
-					$<TARGET_PROPERTY:${TARGET},BINARY_DIR>/CMakeFiles/$<TARGET_PROPERTY:${TARGET},NAME>.dir
+					$<TARGET_PROPERTY:${TARGET},BINARY_DIR>/CMakeFiles/${TARGET}.dir
 					)
-			elseif( CMAKE_CXX_COMPILER_ID MATCHES GNU AND SONAR AND NOT COVERAGE_ARGS_GCOVR )
+			elseif( CMAKE_CXX_COMPILER_ID MATCHES GNU AND SONAR )
 				list( APPEND TARGETS_TO_COVER_DIRS
-					-f
-					$<TARGET_PROPERTY:${TARGET},SOURCE_DIR>
+					$<TARGET_PROPERTY:${TARGET},BINARY_DIR>/CMakeFiles/${TARGET}.dir
 					)
 			elseif( CMAKE_CXX_COMPILER_ID MATCHES Clang )
 				list( APPEND TARGETS_TO_COVER_OBJS
