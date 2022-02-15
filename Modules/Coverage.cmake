@@ -66,6 +66,7 @@ else()
 	endif()
 endif()
 
+unset( COVERAGE_TARGETS CACHE )
 
 ################################################################################
 # coverage(
