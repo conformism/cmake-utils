@@ -32,6 +32,10 @@ if( COVERAGE OR CMAKE_BUILD_TYPE MATCHES Coverage )
 
 	elseif( CMAKE_CXX_COMPILER_ID MATCHES Clang )
 
+		if( SONAR )
+			message( FATAL_ERROR "Sonarqube support for llvm-cov reports seemed to be broken and is not implemented here, use GCC instead" )
+		endif()
+
 		find_program( LLVM_COV NAMES llvm-cov )
 		if( LLVM_COV )
 			message( STATUS "Found llvm-cov: ${LLVM_COV}" )
