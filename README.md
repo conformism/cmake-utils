@@ -7,7 +7,7 @@
 
 ## Description
 
-This is a collection of CMake utilities to include in a C++ project a set of usefull development tools.
+This is a collection of CMake utilities to include in a C++ project a set of useful development tools.
 
 You can include it using [Nix](https://nixos.org/), [CPM](https://github.com/cpm-cmake/CPM.cmake), Git submodule or system wide installation. Nix is the recommended way as it manage the installation of the tools themselves (which are usually either not in the distro repos or outdated).
 
@@ -303,7 +303,7 @@ coverage(
 - `TARGET_TO_RUN` : Target to run, typically a unittest executable.
 - `TARGETS_TO_COVER` : Targets to produce coverage reports on, typically libraries tested by the unittest executable.
 - `EXCLUDE_FROM_ALL` : Exclude the coverage target from global reports produced by 'coverage' target.
-- `ARGS_GCOVR` : Arguments to pass to gcovr (used for sonarqube reports), especially usefull to specify source coverage filters (`-e` and `-f`) as this is not automatically done as for lcov and llvm-cov.
+- `ARGS_GCOVR` : Arguments to pass to gcovr (used for sonarqube reports), especially useful to specify source coverage filters (`-e` and `-f`) as this is not automatically done as for lcov and llvm-cov.
 
 ```cmake
 coverage_global()
