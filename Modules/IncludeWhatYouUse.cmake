@@ -1,10 +1,20 @@
 find_program( IWYU NAMES include-what-you-use iwyu )
 if( IWYU )
 	message( STATUS "Found IWYU: ${IWYU}" )
-	add_custom_target( iwyu )
 else()
 	message( STATUS "Not found IWYU: iwyu targets disabled" )
 endif()
+find_program( IWYU_TOOL NAMES iwyu_tool.py iwyu_tool )
+if( IWYU_TOOL )
+	message( STATUS "Found iwyu_tool: ${IWYU_TOOL}" )
+else()
+	message( STATUS "Not found iwyu_tool: iwyu targets disabled" )
+endif()
+
+if( IWYU AND IWYU_TOOL )
+	add_custom_target( iwyu )
+endif()
+
 
 ################################################################################
 # iwyu(
@@ -40,11 +50,8 @@ function( iwyu )
 	else()
 		message( FATAL_ERROR "Specify a target!" )
 	endif()
-	foreach( ARG ${IWYU_ARGS} )
-		list( APPEND ALL_ARGS ${ARG} )
-	endforeach()
 
-	if( IWYU )
+	if( IWYU AND IWYU_TOOL )
 		add_custom_target( ${IWYU_TARGET}_iwyu
 			SOURCES ${IWYU_SRC} ${IWYU_ADDITIONAL_FILES}
 #			COMMENT "Include What You Use"
@@ -55,9 +62,9 @@ function( iwyu )
 			add_custom_command(
 				TARGET ${IWYU_TARGET}_iwyu
 				PRE_BUILD
-				COMMAND ${IWYU}
-					${IWYU_ARGS}
+				COMMAND ${IWYU_TOOL}
 					${SRC}
+					${IWYU_ARGS}
 					|| exit ${IWYU_ERROR}
 				COMMENT "IWYU ${SRC}"
 				)
