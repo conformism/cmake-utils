@@ -39,7 +39,7 @@ let
     else [];
   coverxygen = need-all: need-doxygen:
     if need-all || need-doxygen
-    then callPackage ./nix/coverxygen.nix {}
+    then callPackage ./nix/coverxygen.nix { doxygen = (doxygen need-all need-doxygen); }
     else [];
   cppcheck = need-all: need-cppcheck:
     if need-all || need-cppcheck
@@ -47,7 +47,7 @@ let
     else [];
   doxygen = need-all: need-doxygen:
     if need-all || need-doxygen
-    then pkgs.doxygen
+    then callPackage ./nix/doxygen.nix { inherit llvmPackages; }
     else [];
   gcovr = need-all: need-coverage:
     if need-all || need-coverage
@@ -71,7 +71,7 @@ let
     else [];
   m-css = need-all: need-doxygen: need-m-css:
     if need-all || (need-doxygen && need-m-css)
-    then callPackage ./nix/m-css.nix {}
+    then callPackage ./nix/m-css.nix { doxygen = (doxygen need-all need-doxygen); }
     else [];
   sonar-scanner-cli = need-all: need-sonar:
     if need-all || need-sonar

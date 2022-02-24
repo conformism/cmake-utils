@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchFromGitHub
+, doxygen
 }:
 
 stdenv.mkDerivation {
@@ -12,6 +13,8 @@ stdenv.mkDerivation {
     rev = "d44d460";
     sha256 = "sha256-n2ajNgDkbeJh4gE/W/1QhCwYOuXCsYxLOtII6RVh3Ic=";
   };
+
+  propagatedBuildInputs = [ doxygen ];
 
 #    install -d $out/opt/m.css/
 #    install -D ./* -t $out/opt/m.css/
