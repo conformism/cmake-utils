@@ -61,6 +61,13 @@ else()
 	message( STATUS "Not found doxygen: dox targets disabled" )
 endif()
 
+mark_as_advanced( DOXYGEN )
+mark_as_advanced( DIA )
+mark_as_advanced( DOT )
+mark_as_advanced( PLANTUML )
+mark_as_advanced( GENHTML )
+mark_as_advanced( MCSS_EXECUTABLE )
+
 ################################################################################
 # doxygen(
 #         [TARGET target]

@@ -20,6 +20,10 @@ if( CODECHECKER_REPORT )
 	endif()
 endif()
 
+mark_as_advanced( CODECHECKER )
+mark_as_advanced( REPORT_CONVERTER )
+mark_as_advanced( TEST_COMMAND )
+
 ################################################################################
 # codechecker(
 #             [TARGET target]

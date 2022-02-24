@@ -19,6 +19,8 @@ else()
 	message( STATUS "Not found ClangBuildAnalyzer: build_analyzer targets disabled" )
 endif()
 
+mark_as_advanced( CLANG_BUILD_ANALYZER )
+
 ################################################################################
 # enable_clang_build_analyzer(
 #                             [TARGET target]

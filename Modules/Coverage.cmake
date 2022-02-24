@@ -72,6 +72,14 @@ endif()
 
 unset( COVERAGE_TARGETS CACHE )
 
+mark_as_advanced( GCOV )
+mark_as_advanced( GCOVR )
+mark_as_advanced( LCOV )
+mark_as_advanced( GENHTML )
+mark_as_advanced( LLVM_COV )
+mark_as_advanced( LLVM_PROFDATA )
+mark_as_advanced( Catch2_DIR )
+
 ################################################################################
 # coverage(
 #          [TARGET_TO_RUN target]

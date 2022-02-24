@@ -7,6 +7,8 @@ else()
 	message( STATUS "Not found Clang-Format: format targets disabled" )
 endif()
 
+mark_as_advanced( CLANG_FORMAT )
+
 ################################################################################
 # clang_format(
 #              [TARGET target]

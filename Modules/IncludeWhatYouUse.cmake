@@ -15,6 +15,8 @@ if( IWYU AND IWYU_TOOL )
 	add_custom_target( iwyu )
 endif()
 
+mark_as_advanced( IWYU )
+mark_as_advanced( IWYU_TOOL )
 
 ################################################################################
 # iwyu(

@@ -7,6 +7,8 @@ else()
 	message( STATUS "Not found Clang-Tidy: tidy targets disabled" )
 endif()
 
+mark_as_advanced( CLANG_TIDY )
+
 ################################################################################
 # clang_tidy(
 #            [TARGET target]

@@ -16,6 +16,9 @@ else()
 	message( STATUS "Not found Uncrustify: uncrustify targets disabled" )
 endif()
 
+mark_as_advanced( UNCRUSTIFY )
+mark_as_advanced( DIFF )
+
 ################################################################################
 # uncrustify(
 #            [TARGET target]

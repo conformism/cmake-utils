@@ -6,6 +6,8 @@ else()
 	message( STATUS "Not found Cppcheck: cppcheck targets disabled" )
 endif()
 
+mark_as_advanced( CPPCHECK )
+
 ################################################################################
 # cppcheck(
 #          [TARGET target]

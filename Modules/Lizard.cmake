@@ -6,6 +6,8 @@ else()
 	message( STATUS "Not found Lizard: lizard targets disabled" )
 endif()
 
+mark_as_advanced( LIZARD )
+
 ################################################################################
 # lizard(
 #        [TARGET target]
