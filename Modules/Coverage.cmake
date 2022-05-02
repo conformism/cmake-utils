@@ -97,12 +97,15 @@ mark_as_advanced( Catch2_DIR )
 #       target.
 # [ARGS_GCOVR]
 #       Arguments to pass to gcovr (used for sonarqube reports), especially
-#       usefull to specify source coverage filters ('-e' and '-f').
+#       useful to specify source coverage filters ('-e' and '-f').
+# [ARGS_RUN]
+#       Arguments to pass to the unittest executable, especially useful to
+#       filter the executed tests during a development phase.
 ################################################################################
 function( coverage )
 	set( OPTIONS EXCLUDE_FROM_ALL )
 	set( ONEVALUEARGS TARGET_TO_RUN )
-	set( MULTIVALUEARGS TARGETS_TO_COVER ARGS_GCOVR )
+	set( MULTIVALUEARGS TARGETS_TO_COVER ARGS_GCOVR ARGS_RUN )
 	cmake_parse_arguments( COVERAGE
 		"${OPTIONS}"
 		"${ONEVALUEARGS}"
@@ -185,6 +188,7 @@ function( coverage )
 #					GCOV_PREFIX=${TARGET_DIR}
 #					GCOV_PREFIX_STRIP=9
 					$<TARGET_FILE:${COVERAGE_TARGET_TO_RUN}>
+					${COVERAGE_ARGS_RUN}
 				COMMAND ${LCOV} -c
 					${TARGETS_TO_COVER_DIRS}
 #					-d ${TARGET_DIR}
@@ -238,6 +242,7 @@ function( coverage )
 					$<TARGET_FILE:${COVERAGE_TARGET_TO_RUN}>
 					-r sonarqube
 					-o "${TARGET_TO_RUN_DIR}/sonarqube_report_test.xml"
+					${COVERAGE_ARGS_RUN}
 				)
 			add_custom_command(
 				DEPENDS
@@ -302,6 +307,7 @@ function( coverage )
 				COMMAND
 					LLVM_PROFILE_FILE=${TARGET_DIR}/coverage.profraw
 					$<TARGET_FILE:${COVERAGE_TARGET_TO_RUN}>
+					${COVERAGE_ARGS_RUN}
 				COMMAND ${LLVM_PROFDATA} merge
 					-sparse "${TARGET_DIR}/coverage.profraw"
 					-o "${TARGET_DIR}/coverage.profdata"

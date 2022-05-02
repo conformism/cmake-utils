@@ -297,6 +297,9 @@ coverage(
 	ARGS_GCOVR
 		<arg1>
 		<...>
+	ARGS_RUN
+		<arg1>
+		<...>
 	)
 ```
 
@@ -304,6 +307,7 @@ coverage(
 - `TARGETS_TO_COVER` : Targets to produce coverage reports on, typically libraries tested by the unittest executable.
 - `EXCLUDE_FROM_ALL` : Exclude the coverage target from global reports produced by 'coverage' target.
 - `ARGS_GCOVR` : Arguments to pass to gcovr (used for sonarqube reports), especially useful to specify source coverage filters (`-e` and `-f`) as this is not automatically done as for lcov and llvm-cov.
+- `ARGS_RUN` : Arguments to pass to the unittest executable, especially useful to filter the executed tests during a development phase.
 
 ```cmake
 coverage_global()
