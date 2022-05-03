@@ -1,3 +1,42 @@
+# Script mode to remove '.gcda' files.
+# During this step, go in each directory passed as argument and call the second
+# step that list and remove matching files.
+################################################################################
+if( CMAKE_SCRIPT_MODE_FILE AND CLEAN_GCDA )
+	set( ARG_I 0 )
+	set( STARTED OFF )
+	message( STATUS "Cleaning .gcda files" )
+
+	while( ARG_I LESS ${CMAKE_ARGC} )
+		if( STARTED )
+			execute_process(
+				COMMAND ${CMAKE_COMMAND} -E
+					chdir "${CMAKE_ARGV${ARG_I}}"
+					${CMAKE_COMMAND}
+					-DCLEAN_GCDA_1=ON
+					-P "${CMAKE_CURRENT_LIST_FILE}"
+				)
+		endif()
+
+		if( "${CMAKE_ARGV${ARG_I}}" STREQUAL -- )
+			set( STARTED ON )
+		endif()
+
+		math( EXPR ARG_I "${ARG_I}+1" )
+	endwhile()
+
+	return()
+elseif( CMAKE_SCRIPT_MODE_FILE AND CLEAN_GCDA_1 )
+	file( GLOB_RECURSE ALL_GCDA_FILES "*.gcda" )
+		
+	execute_process(
+		COMMAND ${CMAKE_COMMAND} -E
+			rm -f ${ALL_GCDA_FILES} ""
+		)
+
+	return()
+endif()
+
 if( COVERAGE OR CMAKE_BUILD_TYPE MATCHES Coverage )
 	if( CMAKE_CXX_COMPILER_ID MATCHES GNU )
 		find_program( GCOV NAMES gcov )
@@ -71,6 +110,7 @@ else()
 endif()
 
 unset( COVERAGE_TARGETS CACHE )
+set( CURRENT_FILE ${CMAKE_CURRENT_LIST_FILE} )
 
 mark_as_advanced( GCOV )
 mark_as_advanced( GCOVR )
@@ -121,8 +161,11 @@ function( coverage )
 				)
 
 			if( CMAKE_CXX_COMPILER_ID MATCHES GNU AND NOT SONAR )
-				list( APPEND TARGETS_TO_COVER_DIRS
+				list( APPEND TARGETS_TO_COVER_DIRS_D
 					-d
+					$<TARGET_PROPERTY:${TARGET},BINARY_DIR>/CMakeFiles/${TARGET}.dir
+					)
+				list( APPEND TARGETS_TO_COVER_DIRS
 					$<TARGET_PROPERTY:${TARGET},BINARY_DIR>/CMakeFiles/${TARGET}.dir
 					)
 			elseif( CMAKE_CXX_COMPILER_ID MATCHES GNU AND SONAR )
@@ -184,13 +227,20 @@ function( coverage )
 			endif()
 			add_custom_command(
 				OUTPUT "${TARGET_DIR}/coverage.info"
+				DEPENDS
+					${COVERAGE_TARGET_TO_RUN}
+					${COVERAGE_TARGETS_TO_COVER}
+				COMMAND ${CMAKE_COMMAND}
+					-DCLEAN_GCDA=ON
+					-P ${CURRENT_FILE}
+					-- ${TARGETS_TO_COVER_DIRS}
 				COMMAND
 #					GCOV_PREFIX=${TARGET_DIR}
 #					GCOV_PREFIX_STRIP=9
 					$<TARGET_FILE:${COVERAGE_TARGET_TO_RUN}>
 					${COVERAGE_ARGS_RUN}
 				COMMAND ${LCOV} -c
-					${TARGETS_TO_COVER_DIRS}
+					${TARGETS_TO_COVER_DIRS_D}
 #					-d ${TARGET_DIR}
 					-o "${TARGET_DIR}/coverage.info"
 					--rc lcov_branch_coverage=1
@@ -238,6 +288,13 @@ function( coverage )
 			add_custom_command(
 				OUTPUT
 					"${TARGET_TO_RUN_DIR}/sonarqube_report_test.xml"
+				DEPENDS
+					${COVERAGE_TARGET_TO_RUN}
+					${COVERAGE_TARGETS_TO_COVER}
+				COMMAND ${CMAKE_COMMAND}
+					-DCLEAN_GCDA=ON
+					-P ${CURRENT_FILE}
+					-- ${TARGETS_TO_COVER_DIRS}
 				COMMAND
 					$<TARGET_FILE:${COVERAGE_TARGET_TO_RUN}>
 					-r sonarqube
@@ -304,6 +361,9 @@ function( coverage )
 			endif()
 			add_custom_command(
 				OUTPUT "${TARGET_DIR}/coverage.profdata"
+				DEPENDS
+					${COVERAGE_TARGET_TO_RUN}
+					${COVERAGE_TARGETS_TO_COVER}
 				COMMAND
 					LLVM_PROFILE_FILE=${TARGET_DIR}/coverage.profraw
 					$<TARGET_FILE:${COVERAGE_TARGET_TO_RUN}>
@@ -425,24 +485,3 @@ function( coverage_global )
 		endif()
 	endif()
 endfunction()
-
-#[[
-if( NOT CMAKE_SCRIPT_MODE_FILE )
-# TODO clean gcda
-#[ [
-				COMMAND
-					${CMAKE_COMMAND} --debug-output -E chdir ${CMAKE_BUILD_DIR}
-					${CMAKE_COMMAND} -DRM_GCDA=ON -P ${CMAKE_SOURCE_DIR}/cmake/Coverage.cmake
-#] ]
-else()
-if( RM_GCDA )
-	file( GLOB_RECURSE ALL_GCDA_FILES "*.gcda" )
-	execute_process(
-		COMMAND ${CMAKE_COMMAND} -E
-			echo ${ALL_GCDA_FILES}
-		COMMAND ${CMAKE_COMMAND} -E
-			remove ${ALL_GCDA_FILES}
-		)
-endif()
-endif()
-#]]
