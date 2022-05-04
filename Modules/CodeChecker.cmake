@@ -139,4 +139,12 @@ function( codechecker )
 		POST_BUILD
 		COMMENT "${TARGET_DIR}/html/index.html"
 		)
+
+	set_property(
+		TARGET ${TARGET_NAME}
+		PROPERTY
+		ADDITIONAL_CLEAN_FILES
+			"${TARGET_DIR}/codechecker_reports"
+			"${TARGET_DIR}/html"
+		)
 endfunction()

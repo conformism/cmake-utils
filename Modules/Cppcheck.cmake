@@ -92,6 +92,14 @@ function( cppcheck )
 					"${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles/${CPPCHECK_TARGET}_cppcheck.dir/reports"
 				COMMENT "CodeChecker Cppcheck report export"
 				)
+
+			set_property(
+				TARGET ${CPPCHECK_TARGET}_cppcheck
+				PROPERTY
+				ADDITIONAL_CLEAN_FILES
+					"${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles/${CPPCHECK_TARGET}_cppcheck.dir/codechecker_reports"
+					"${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles/${CPPCHECK_TARGET}_cppcheck.dir/reports"
+				)
 		endif()
 
 		add_dependencies( cppcheck ${CPPCHECK_TARGET}_cppcheck )

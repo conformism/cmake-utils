@@ -276,6 +276,14 @@ function( coverage )
 					)
 			endif()
 
+			set_property(
+				TARGET ${TARGET_NAME}
+				PROPERTY
+				ADDITIONAL_CLEAN_FILES
+					"${TARGET_DIR}/html"
+					"${TARGET_DIR}/coverage.info"
+				)
+
 		elseif( CMAKE_CXX_COMPILER_ID MATCHES GNU AND SONAR )
 
 			get_target_property( TARGET_TO_RUN_DIR
@@ -345,6 +353,14 @@ function( coverage )
 				COMMENT "${TARGET_DIR}/sonarqube_report_coverage.xml"
 				)
 
+			set_property(
+				TARGET ${TARGET_NAME}
+				PROPERTY
+				ADDITIONAL_CLEAN_FILES
+					"${TARGET_TO_RUN_DIR}/sonarqube_report_test.xml"
+					"${TARGET_DIR}/sonarqube_report_coverage.xml"
+				)
+
 		elseif( CMAKE_CXX_COMPILER_ID MATCHES Clang AND NOT SONAR )
 
 			if( NOT COVERAGE_EXCLUDE_FROM_ALL )
@@ -398,6 +414,15 @@ function( coverage )
 					)
 			endif()
 
+			set_property(
+				TARGET ${TARGET_NAME}
+				PROPERTY
+				ADDITIONAL_CLEAN_FILES
+					"${TARGET_DIR}/html"
+					"${TARGET_DIR}/coverage.profdata"
+					"${TARGET_DIR}/coverage.profraw"
+				)
+
 		endif()
 		if( COVERAGE_GLOBAL_ONLY AND NOT SONAR )
 			add_dependencies( coverage_all ${TARGET_NAME} )
@@ -445,6 +470,14 @@ function( coverage_global )
 				)
 			add_dependencies( coverage ${COVERAGE_TARGETS} )
 
+			set_property(
+				TARGET coverage
+				PROPERTY
+				ADDITIONAL_CLEAN_FILES
+					"${COVERAGE_DIR}/html"
+					"${COVERAGE_DIR}/coverage.info"
+				)
+
 		elseif( CMAKE_CXX_COMPILER_ID MATCHES GNU AND SONAR )
 
 			add_custom_target( coverage )
@@ -481,6 +514,14 @@ function( coverage_global )
 				COMMENT "${COVERAGE_DIR}/html/index.html"
 				)
 			add_dependencies( coverage ${COVERAGE_TARGETS} )
+
+			set_property(
+				TARGET coverage
+				PROPERTY
+				ADDITIONAL_CLEAN_FILES
+					"${COVERAGE_DIR}/html"
+					"${COVERAGE_DIR}/coverage.profdata"
+				)
 
 		endif()
 	endif()
