@@ -28,8 +28,10 @@ if( CMAKE_SCRIPT_MODE_FILE AND CLEAN_GCDA )
 	return()
 elseif( CMAKE_SCRIPT_MODE_FILE AND CLEAN_GCDA_1 )
 	file( GLOB_RECURSE ALL_GCDA_FILES "*.gcda" )
-		
+
 	execute_process(
+		OUTPUT_QUIET
+		ERROR_QUIET
 		COMMAND ${CMAKE_COMMAND} -E
 			rm -f ${ALL_GCDA_FILES} ""
 		)
@@ -125,7 +127,7 @@ mark_as_advanced( Catch2_DIR )
 #          [TARGET_TO_RUN target]
 #          [TARGETS_TO_COVER target1 [target2] ...]
 #          [EXCLUDE_FROM_ALL]
-#          [ARGS_GCOVR arg1 [arg2] ...] 
+#          [ARGS_GCOVR arg1 [arg2] ...]
 #          )
 # [TARGET_TO_RUN]
 #       Target to run, typically a unittest executable.
