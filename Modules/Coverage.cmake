@@ -314,6 +314,10 @@ function( coverage )
 					-- ${TARGETS_TO_COVER_DIRS}
 				COMMAND
 					$<TARGET_FILE:${COVERAGE_TARGET_TO_RUN}>
+					${COVERAGE_ARGS_RUN}
+					|| exit ${COVERAGE_ERROR_STATUS}
+				COMMAND
+					$<TARGET_FILE:${COVERAGE_TARGET_TO_RUN}>
 					-r sonarqube
 					-o "${TARGET_TO_RUN_DIR}/sonarqube_report_test.xml"
 					${COVERAGE_ARGS_RUN}
