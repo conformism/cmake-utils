@@ -202,6 +202,7 @@ For more informations about those options, take a look to the utils detail parag
 | `CODECHECKER_REPORT`     | `OFF` | Tools that are supported as analyzers produce CodeChecker reports                                               | `CODECHECKER` `CPPCHECK` `LIBFUZZER` |
 | `COVERAGE`               | `OFF` | Enable coverage for the current build type, prefer to use the Coverage build type                                                         | `COVERAGE` |
 | `SONAR`                  | `OFF` | The coverage target will produce SonarQube reports instead of console / HTML                                                              | `COVERAGE` |
+| `COVERAGE_ERROR`         | `ON`  | Abort on unittest error                                                                                                                   | `COVERAGE` |
 | `COVERAGE_GLOBAL_ONLY`   | `OFF` | When calling the 'coverage' target, do not show the dependant per target reports. The counterpart is the creation of intermediate targets | `COVERAGE` |
 | `COVERAGE_GCOVR_VERBOSE` | `OFF` | Print gcovr reports in terminal while generating sonarqube coverage reports                                                               | `COVERAGE` |
 | `DOXYGEN_MCSS`           | `OFF` | Enable m.css Doxygen reports                                                                                                              | `DOXYGEN`  |

@@ -218,6 +218,12 @@ function( coverage )
 				)
 		endif()
 
+		if( COVERAGE_ERROR )
+			set( COVERAGE_ERROR_STATUS 1 )
+		else()
+			set( COVERAGE_ERROR_STATUS 0 )
+		endif()
+
 		if( CMAKE_CXX_COMPILER_ID MATCHES GNU AND NOT SONAR )
 
 			if( NOT COVERAGE_EXCLUDE_FROM_ALL )
@@ -241,6 +247,7 @@ function( coverage )
 #					GCOV_PREFIX_STRIP=9
 					$<TARGET_FILE:${COVERAGE_TARGET_TO_RUN}>
 					${COVERAGE_ARGS_RUN}
+					|| exit ${COVERAGE_ERROR_STATUS}
 				COMMAND ${LCOV} -c
 					${TARGETS_TO_COVER_DIRS_D}
 #					-d ${TARGET_DIR}
@@ -310,6 +317,7 @@ function( coverage )
 					-r sonarqube
 					-o "${TARGET_TO_RUN_DIR}/sonarqube_report_test.xml"
 					${COVERAGE_ARGS_RUN}
+					|| exit ${COVERAGE_ERROR_STATUS}
 				)
 			add_custom_command(
 				DEPENDS
@@ -386,6 +394,7 @@ function( coverage )
 					LLVM_PROFILE_FILE=${TARGET_DIR}/coverage.profraw
 					$<TARGET_FILE:${COVERAGE_TARGET_TO_RUN}>
 					${COVERAGE_ARGS_RUN}
+					|| exit ${COVERAGE_ERROR_STATUS}
 				COMMAND ${LLVM_PROFDATA} merge
 					-sparse "${TARGET_DIR}/coverage.profraw"
 					-o "${TARGET_DIR}/coverage.profdata"
