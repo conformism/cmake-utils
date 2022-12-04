@@ -91,6 +91,7 @@ in stdenvNoCC.mkDerivation {
   buildInputs = [
     git
     clang
+    editorconfig-checker
     (catch3 need-all need-coverage need-catch3)
     (clang-build-analyzer need-all need-clang-build-analyzer)
     (codechecker need-all need-codechecker)

@@ -1,7 +1,7 @@
 #!/usr/bin/make
 
 ifeq ($(PREFIX),)
-    PREFIX := /usr/local
+	PREFIX := /usr/local
 endif
 
 .PHONY: install uninstall
