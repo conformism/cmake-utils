@@ -7,11 +7,11 @@ with python3Packages;
 
 buildPythonPackage rec {
   pname = "codechecker";
-  version = "6.18.2";
+  version = "6.21.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-x5OhlR9YuvC6QU5B9kWK9ikvZCjGmehLi3HaFh2DTws=";
+    sha256 = "sha256-V8NH9yZzqYcM5CBftImWO6wCTNY2YOZWW4a5gzMaSXU=";
   };
 
   doCheck = false;

@@ -23,7 +23,7 @@ let
   clang = llvmPackages.clang;
   catch3 = need-all: need-coverage: need-catch3:
     if need-all || need-coverage || need-catch3
-    then callPackage ./nix/catch3.nix {}
+    then pkgs.catch2_3
     else [];
   clang-build-analyzer = need-all: need-clang-buil-analyzer:
     if need-all || need-clang-build-analyzer

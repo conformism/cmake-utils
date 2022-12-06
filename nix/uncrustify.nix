@@ -5,13 +5,13 @@
 }:
 
 uncrustify.overrideAttrs (old: rec {
-  version = "0.74.0";
+  version = "0.76.0";
 
   src = fetchFromGitHub {
     owner = old.pname;
     repo = old.pname;
     rev = "${old.pname}-${version}";
-    sha256 = "sha256-rctITiwWLdM6QY/vpdbWWs0rqFe/ww3c0v7L/ivciGw=";
+    sha256 = "sha256-th3lp4WqqruHx2/ym3I041y2wLbYM1b+V6yXNOWuUvM=";
   };
 
   nativeBuildInputs = [ cmake python3 ];

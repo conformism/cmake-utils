@@ -5,14 +5,15 @@
 , clang
 }:
 
-stdenv.mkDerivation {
-  name = "clang-build-analyzer";
+stdenv.mkDerivation rec {
+  pname = "clang-build-analyzer";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "aras-p";
     repo = "ClangBuildAnalyzer";
-    rev = "5d40542";
-    sha256 = "sha256-ZaSj4HD6k4NmUtXkzRdmjbSJmwd2vVXcaCXEyPrWRRo=";
+    rev = "v${version}";
+    sha256 = "sha256-uE7EpPGuecM70vWm1IlG+aBBdvUXroWP03tFHYpQykw=";
   };
 
   nativeBuildInputs = [ cmake ];

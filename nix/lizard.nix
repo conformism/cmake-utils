@@ -6,11 +6,11 @@ with python3Packages;
 
 buildPythonPackage rec {
   pname = "lizard";
-  version = "1.17.9";
+  version = "1.17.10";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-du4OYx2YW+od1lIaA8bC+p3OWiJIs9JsSYkOnghbeu0=";
+    sha256 = "sha256-YteKzWRyS+KLX0qiemMN+ktK+9FZbR8l1a0cGjoHWtw=";
   };
 
   doCheck = false;
