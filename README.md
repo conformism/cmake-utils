@@ -131,9 +131,7 @@ CPMAddPackage(
 	DOWNLOAD_ONLY
 	)
 
-set( CMakeUtils_DIR
-	"${FETCHCONTENT_BASE_DIR}/cmake-utils-src"
-	)
+set( CMakeUtils_DIR "${cmake-utils_SOURCE_DIR}" )
 ```
 
 ### As Git submodule
