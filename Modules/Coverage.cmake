@@ -192,6 +192,7 @@ function( coverage )
 				$<$<CXX_COMPILER_ID:Clang>:-fcoverage-mapping>
 				)
 			target_link_libraries( ${TARGET}
+				PRIVATE
 				$<$<CXX_COMPILER_ID:GNU>:-lgcov>
 				)
 			target_link_options( ${TARGET}

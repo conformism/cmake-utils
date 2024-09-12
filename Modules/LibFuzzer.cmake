@@ -51,6 +51,7 @@ function( add_libfuzzer_target )
 			)
 
 		target_link_libraries( ${LIBFUZZER_TARGET}
+			PRIVATE
 			${LIBFUZZER_TARGET_TO_FUZZ}
 			-fsanitize=fuzzer
 			)

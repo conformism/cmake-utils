@@ -89,6 +89,7 @@ function( enable_sanitizers )
 			)
 
 		target_link_libraries( ${SANITIZERS_TARGET}
+			PRIVATE
 			${SANITIZERS_FLAGS}
 			)
 	endif()
