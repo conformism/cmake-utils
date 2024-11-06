@@ -1,31 +1,45 @@
 {
-  description = "CMake Utilities.";
+  description = "CMake Utilities";
 
   nixConfig.bash-prompt-suffix = "(cmake-utils) ";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/22.11";
 
-    utils.url = "github:numtide/flake-utils";
-    utils.inputs.nixpkgs.follows = "nixpkgs";
+    flake-utils.url = "github:numtide/flake-utils";
   };
 
   outputs = { self
   , nixpkgs
-  , ...
-  }@inputs:
-  inputs.utils.lib.eachDefaultSystem (system:
+  , flake-utils
+  }:
+  flake-utils.lib.eachDefaultSystem (system:
   let
-    pkgs = import nixpkgs { inherit system; };
-    this-package-dev = pkgs.callPackage ./default.nix { inherit pkgs; need-all = true; };
-    this-package = pkgs.callPackage ./default.nix { inherit pkgs; };
+    pkgs = nixpkgs.legacyPackages.${system};
+    lib = nixpkgs.lib;
+
+    this-package = pkgs.callPackage ./default.nix {};
+    this-package-all = pkgs.callPackage ./default.nix { need-all = true; };
 
   in {
-    devShell = pkgs.mkShell rec {
-      packages = [ this-package-dev ];
-      inputsFrom = [ this-package-dev ];
+    overlays = {
+      pkgs = final: prev: {
+        cmake-utils = this-package;
+        cmake-utils-all = this-package-all;
+      };
     };
 
-    defaultPackage = this-package;
+    devShells = {
+      default = pkgs.mkShell {
+        packages = [ this-package-all ];
+        inputsFrom = [ this-package-all ];
+      };
+    };
+
+    packages = {
+      default = this-package;
+      cmake-utils = this-package;
+      cmake-utils-all = this-package-all;
+    };
   });
 }

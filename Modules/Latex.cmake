@@ -1,10 +1,16 @@
 find_package( LATEX COMPONENTS XELATEX )
 
+if( XELATEX_COMPILER )
+	message( STATUS "Found xelatex: ${XELATEX_COMPILER}" )
+else()
+	message( FATAL_ERROR "Not found xelatex: install it" )
+endif()
+
 ################################################################################
 # compile_latex_file(name
 #                    [OUTPUT output2 [output3] ...]
 #                    [DESTINATION destination_dir]
-#                    [SOURCE source_dir] 
+#                    [SOURCE source_dir]
 #                    [TEXINPUTS texinputs]
 #                    [SUBDIRS subdir1 [subdir2] ...]
 #                    [REGISTER_TO var]
@@ -52,7 +58,7 @@ find_package( LATEX COMPONENTS XELATEX )
 #       "\usepackage[outputdir=\mintedoutputdir]{minted}"
 ################################################################################
 function( compile_latex_file NAME )
-	set( OPTIONS SHELL_ESCAPE MINTED )
+	set( OPTIONS SHELL_ESCAPE MINTED XDV )
 	set( ONEVALUEARGS DESTINATION SOURCE TEXINPUTS REGISTER_TO )
 	set( MULTIVALUEARGS OUTPUT SUBDIRS DEPENDS )
 	cmake_parse_arguments( LATEX
@@ -83,12 +89,19 @@ function( compile_latex_file NAME )
 	else()
 		set( LATEX_MINTED )
 	endif()
+	if( LATEX_XDV )
+		set( OUTPUT_FORMAT "xdv" )
+		set( LATEX_XDV "-no-pdf" )
+	else()
+		set( OUTPUT_FORMAT "pdf" )
+		set( LATEX_XDV )
+	endif()
 	foreach( SUBDIR ${LATEX_SUBDIRS} )
 		list( APPEND FULL_SUBDIRS "${LATEX_DESTINATION}/${SUBDIR}" )
 	endforeach()
 
 	add_custom_command(
-		OUTPUT "${LATEX_DESTINATION}/${NAME}.pdf"
+		OUTPUT "${LATEX_DESTINATION}/${NAME}.${OUTPUT_FORMAT}"
 			${LATEX_OUTPUT}
 		DEPENDS "${LATEX_SOURCE}/${NAME}.tex"
 			${LATEX_DEPENDS}
@@ -101,9 +114,10 @@ function( compile_latex_file NAME )
 			"${LATEX_DESTINATION}/${NAME}-blx.bib"
 			# Some are probably missing
 		COMMAND ${CMAKE_COMMAND} -E make_directory ${LATEX_DESTINATION} ${FULL_SUBDIRS}
-		COMMAND ${CMAKE_COMMAND} -E env TEXINPUTS="${LATEX_TEXINPUTS}": 
+		COMMAND ${CMAKE_COMMAND} -E env TEXINPUTS="${LATEX_TEXINPUTS}":
 			${XELATEX_COMPILER}
 			"${LATEX_SHELL_ESCAPE}"
+			"${LATEX_XDV}"
 			--interaction=nonstopmode
 			--output-directory="${LATEX_DESTINATION}"
 			"\"${LATEX_MINTED}\\input{${LATEX_SOURCE}/${NAME}.tex}\""
@@ -112,7 +126,7 @@ function( compile_latex_file NAME )
 
 	if( LATEX_REGISTER_TO )
 		list( APPEND "${LATEX_REGISTER_TO}"
-			"${LATEX_DESTINATION}/${NAME}.pdf"
+			"${LATEX_DESTINATION}/${NAME}.${OUTPUT_FORMAT}"
 			)
 		set( "${LATEX_REGISTER_TO}"
 			"${${LATEX_REGISTER_TO}}"
