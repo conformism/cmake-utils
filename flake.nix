@@ -15,31 +15,27 @@
   }:
   flake-utils.lib.eachDefaultSystem (system:
   let
-    pkgs = nixpkgs.legacyPackages.${system};
-    lib = nixpkgs.lib;
-
-    this-package = pkgs.callPackage ./default.nix {};
-    this-package-all = pkgs.callPackage ./default.nix { need-all = true; };
+    pkgs = nixpkgs.legacyPackages.${system}.extend self.overlays.pkgs;
 
   in {
-    overlays = {
-      pkgs = final: prev: {
-        cmake-utils = this-package;
-        cmake-utils-all = this-package-all;
-      };
-    };
-
     devShells = {
       default = pkgs.mkShell {
-        packages = [ this-package-all ];
-        inputsFrom = [ this-package-all ];
+        packages = [ pkgs.cmake-utils-all ];
+        inputsFrom = [ pkgs.cmake-utils-all ];
       };
     };
 
     packages = {
-      default = this-package;
-      cmake-utils = this-package;
-      cmake-utils-all = this-package-all;
+      default = pkgs.cmake-utils;
+      cmake-utils = pkgs.cmake-utils;
+      cmake-utils-all = pkgs.cmake-utils-all;
     };
-  });
+  }) // {
+    overlays = {
+      pkgs = final: prev: {
+        cmake-utils = prev.callPackage ./default.nix {};
+        cmake-utils-all = prev.callPackage ./default.nix { need-all = true; };
+      };
+    };
+  };
 }
