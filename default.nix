@@ -4,93 +4,37 @@
 , stdenvNoCC
 , catch2_3
 , clang
+, clang-build-analyzer
 , clang-tools
+, codechecker
+, coverxygen
 , cppcheck
+, doxygen
 , editorconfig-checker
 , gcovr
 , git
 , include-what-you-use
 , lcov
+, lizard
 , llvmPackages
+, m-css
 , sonar-scanner-cli
-, need-all ? false
-, need-catch3 ? false
-, need-clang-build-analyzer ? false
-, need-clang-tools ? false
-, need-codechecker ? false
-, need-coverage ? false
-, need-cppcheck ? false
-, need-doxygen ? false
-, need-include-what-you-use ? false
-, need-lizard ? false
-, need-m-css ? false
-, need-sonar ? false
-, need-uncrustify ? false
+, uncrustify
+, with-catch3 ? false
+, with-clang-build-analyzer ? false
+, with-clang-tools ? false
+, with-codechecker ? false
+, with-coverage ? false
+, with-cppcheck ? false
+, with-doxygen ? false
+, with-include-what-you-use ? false
+, with-lizard ? false
+, with-m-css ? false
+, with-sonar ? false
+, with-uncrustify ? false
 }:
 
-let
-  add-catch3 = need-all: need-coverage: need-catch3:
-    lib.optionals
-      (need-all || need-coverage || need-catch3)
-      catch2_3;
-  add-clang-build-analyzer = need-all: need-clang-buil-analyzer:
-    lib.optionals
-      (need-all || need-clang-build-analyzer)
-      (callPackage ./nix/clang-build-analyzer.nix { inherit clang; });
-  add-clang-tools = need-all: need-clang-tools:
-    lib.optionals
-      (need-all || need-clang-tools)
-      clang-tools;
-  add-codechecker = need-all: need-codechecker:
-    lib.optionals
-      (need-all || need-codechecker)
-      (callPackage ./nix/codechecker.nix { inherit clang; });
-  add-coverxygen = need-all: need-doxygen:
-    lib.optionals
-      (need-all || need-doxygen)
-      (callPackage ./nix/coverxygen.nix { doxygen = (add-doxygen need-all need-doxygen); });
-  add-cppcheck = need-all: need-cppcheck:
-    lib.optionals
-      (need-all || need-cppcheck)
-      cppcheck;
-  add-doxygen = need-all: need-doxygen:
-    lib.optionals
-      (need-all || need-doxygen)
-      (callPackage ./nix/doxygen.nix { inherit llvmPackages; });
-  add-gcovr = need-all: need-coverage:
-    lib.optionals
-      (need-all || need-coverage)
-      gcovr;
-  add-include-what-you-use = need-all: need-include-what-you-use:
-    lib.optionals
-      (need-all || need-include-what-you-use)
-      include-what-you-use;
-  add-lcov = need-all: need-coverage:
-    lib.optionals
-      (need-all || need-coverage)
-      lcov;
-  add-lizard = need-all: need-lizard:
-    lib.optionals
-      (need-all || need-lizard)
-      (callPackage ./nix/lizard.nix {});
-  add-llvm = need-all: need-coverage:
-    lib.optionals
-      (need-all || need-coverage)
-      llvmPackages.llvm;
-  add-m-css = need-all: need-doxygen: need-m-css:
-    lib.optionals
-      (need-all || (need-doxygen && need-m-css))
-      (callPackage ./nix/m-css.nix { doxygen = (add-doxygen need-all need-doxygen); });
-  add-sonar-scanner-cli = need-all: need-sonar:
-    lib.optionals
-      (need-all || need-sonar)
-      sonar-scanner-cli;
-  add-uncrustify = need-all: need-uncrustify:
-    lib.optionals
-      (need-all || need-uncrustify)
-      (callPackage ./nix/uncrustify.nix {});
-
-in stdenvNoCC.mkDerivation {
+ stdenvNoCC.mkDerivation {
   name = "cmake-utils";
   version = "0.0.0";
 
@@ -100,19 +44,32 @@ in stdenvNoCC.mkDerivation {
     git
     clang
     editorconfig-checker
-    (add-catch3 need-all need-coverage need-catch3)
-    (add-clang-build-analyzer need-all need-clang-build-analyzer)
-    (add-codechecker need-all need-codechecker)
-    (add-coverxygen need-all need-doxygen)
-    (add-cppcheck need-all need-cppcheck)
-    (add-gcovr need-all need-coverage)
-    (add-include-what-you-use need-all need-include-what-you-use)
-    (add-lcov need-all need-coverage)
-    (add-lizard need-all need-lizard)
-    (add-llvm need-all need-coverage)
-    (add-m-css need-all need-doxygen need-m-css)
-    (add-sonar-scanner-cli need-all need-sonar)
-    (add-uncrustify need-all need-uncrustify)
+  ] ++ lib.optionals with-coverage [
+    gcovr
+    lcov
+    llvmPackages.llvm
+  ] ++ lib.optionals (with-coverage || with-catch3) [
+    catch2_3
+  ] ++ lib.optionals with-clang-build-analyzer [
+    clang-build-analyzer
+    clang-tools
+  ] ++ lib.optionals with-codechecker [
+    codechecker
+  ] ++ lib.optionals with-cppcheck [
+    cppcheck
+  ] ++ lib.optionals with-doxygen [
+    coverxygen
+    doxygen
+  ] ++ lib.optionals (with-doxygen && with-m-css) [
+    m-css
+  ] ++ lib.optionals with-include-what-you-use [
+    include-what-you-use
+  ] ++ lib.optionals with-lizard [
+    lizard
+  ] ++ lib.optionals with-sonar [
+    sonar-scanner-cli
+  ] ++ lib.optionals with-uncrustify [
+    uncrustify
   ];
 
   installPhase = ''
