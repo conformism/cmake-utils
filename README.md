@@ -9,7 +9,7 @@
 
 This is a collection of CMake utilities to include in a C++ project a set of useful development tools.
 
-You can include it using [Nix](https://nixos.org/), [CPM](https://github.com/cpm-cmake/CPM.cmake), Git submodule or system wide installation. Nix is the recommended way as it manage the installation of the tools themselves (which are usually either not in the distro repos or outdated).
+You can include it using [Nix](https://nixos.org/), [CPM](https://github.com/cpm-cmake/CPM.cmake), Git submodule or system-wide installation. Nix is the recommended way as it manage the installation of the tools themselves (which are usually either not in the distro repos or outdated).
 
 ## Included tools
 
@@ -31,79 +31,69 @@ You can include it using [Nix](https://nixos.org/), [CPM](https://github.com/cpm
 
 ### With Nix (recommended)
 
-You can select the dependencies you need by setting the corresponding `need-<tool>` flag to `true`, except for LaTeX due to the particularity explained [here](https://github.com/NixOS/nixpkgs/blob/master/doc/languages-frameworks/texlive.section.md), you have to declare yourself your LaTeX dependency. XeLaTeX required by the CMakeUtils module is in the `scheme-small` package and better.
+You can select the dependencies you need by setting the corresponding `with-<tool>` flag to `true`, except for LaTeX due to the particularity explained [here](https://github.com/NixOS/nixpkgs/blob/master/doc/languages-frameworks/texlive.section.md), you have to declare yourself your LaTeX dependency. XeLaTeX required by the CMakeUtils module is in the `scheme-small` package and better.
 
 You can also depend on a different set of tools between regular build and development shell as on the sample below.
 
-- `flake.nix`
+- `flake.nix` (using either flake package output, either overlay output)
 
 ```nix
 {
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs";
 
-    utils.url = "github:numtide/flake-utils";
-    utils.inputs.nixpkgs.follows = "nixpkgs";
+    flake-utils.url = "github:numtide/flake-utils";
 
-    cmake-utils-src.url = "github:conformism/cmake-utils";
+    cmake-utils = {
+      url = "github:conformism/cmake-utils";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = { self, nixpkgs, cmake-utils-src, ... }@inputs:
-    inputs.utils.lib.eachDefaultSystem (system:
-    let
-      pkgs = import nixpkgs { inherit system; };
+  outputs = { self, nixpkgs, cmake-utils, flake-utils, ... }:
+  flake-utils.lib.eachDefaultSystem (system:
+  let
+    # Using flake package output
+    pkgs = nixpkgs.legacyPackages.${system};
+    # Using overlay
+    pkgs = nixpkgs.legacyPackages.${system}.extend cmake-utils.overlays.pkgs;
 
-      cmake-utils = import cmake-utils-src {
-        inherit pkgs;
-        need-catch3 = true;
-        need-clang-build-analyzer = true;
-        need-clang-tools = true;
-        need-codechecker = true;
-        need-coverage = true;
-        need-cppcheck = true;
-        need-doxygen = true;
-        need-include-what-you-use = true;
-        need-lizard = true;
-        need-m-css = true;
-        need-sonar = true;
-        need-uncrustify = true;
-      };
+  in {
+    devShell = pkgs.mkShell {
+      inputsFrom = [
+        self.defaultPackage
+        # Using flake package output
+        (cmake-utils.packages.${system}.cmake-utils-full.override {
+          with-sonar = false;
+        })
+        # Using overlay
+        (pkgs.cmake-utils-full.override {
+          with-sonar = false;
+        })
+      ];
+    };
 
-      cmake-utils-dev = import cmake-utils-src {
-        inherit pkgs;
-        need-all = true;
-      };
-
-      this-package = pkgs.callPackage ./default.nix {
-        inherit pkgs cmake-utils;
-      };
-
-    in {
-      devShell = pkgs.mkShell {
-        inputsFrom = [
-          this-package
-          cmake-utils-dev
-        ];
-      };
-
-      defaultPackage = this-package;
-    });
+    # Using flake package output
+    defaultPackage = pkgs.callPackage ./default.nix {
+      inherit (cmake-utils.packages.${system}) cmake-utils;
+    };
+    # Using overlay
+    defaultPackage = pkgs.callPackage ./default.nix {};
+  });
 }
 ```
 
 - `default.nix`
 
 ```nix
-{ lib
-, pkgs ? import <nixpkgs> {}
+{ stdenv
+, texlive
 , cmake-utils
 }:
 
-with pkgs;
-
 let
-  texlive = pkgs.texlive.combine {
-    inherit (pkgs.texlive) scheme-small standalone pgfplots;
+  texlive-combined = texlive.combine {
+    inherit (texlive) scheme-small standalone pgfplots;
   };
 
 in stdenv.mkDerivation {
@@ -112,7 +102,7 @@ in stdenv.mkDerivation {
   nativeBuildInputs = [
     cmake
     cmake-utils
-    texlive
+    texlive-combined
   ];
 }
 ```
@@ -201,7 +191,7 @@ For more informations about those options, take a look to the utils detail parag
 | `COVERAGE`               | `OFF` | Enable coverage for the current build type, prefer to use the Coverage build type                                                         | `COVERAGE` |
 | `SONAR`                  | `OFF` | The coverage target will produce SonarQube reports instead of console / HTML                                                              | `COVERAGE` |
 | `COVERAGE_ERROR`         | `ON`  | Abort on unittest error                                                                                                                   | `COVERAGE` |
-| `COVERAGE_GLOBAL_ONLY`   | `OFF` | When calling the 'coverage' target, do not show the dependant per target reports. The counterpart is the creation of intermediate targets | `COVERAGE` |
+| `COVERAGE_GLOBAL_ONLY`   | `OFF` | When calling the 'coverage' target, do not show the dependent per target reports. The counterpart is the creation of intermediate targets | `COVERAGE` |
 | `COVERAGE_GCOVR_VERBOSE` | `OFF` | Print gcovr reports in terminal while generating sonarqube coverage reports                                                               | `COVERAGE` |
 | `DOXYGEN_MCSS`           | `OFF` | Enable m.css Doxygen reports                                                                                                              | `DOXYGEN`  |
 | `MCSS_VERSION`           | ` `   | M.CSS git tag                                                                                                                             | `DOXYGEN`  |
@@ -278,7 +268,7 @@ codechecker(
 ```
 
 - `TARGET` : Target to analyse. Will set codechecker target name in consequences.
-- `GLOBAL` : Create a global codechecker target instead of a per-target one, should be prefered to cover a whole project.
+- `GLOBAL` : Create a global codechecker target instead of a per-target one, should be preferred to cover a whole project.
 - `NO_CTU` : Disable cross translation unit analysis.
 - `ADDITIONAL_OPTIONAL_REPORTS` : Specify other analysis reports, generated by tools supported by the report-converter program. Enable report export from those tools with the `CODECHECKER_REPORT` option.
 - `SKIP` : Specify files to analyse regarding the codechecker skipfile syntax.
@@ -410,12 +400,12 @@ compile_latex_file( <name>
 - `OUTPUT` : `${destination_dir}/${name}.pdf` is the default output file. You can add some others with this flag.
 - `DESTINATION` : Directory where output pdf file and byproduct files are created. Default is : `${CMAKE_CURRENT_BINARY_DIR}`.
 - `SOURCE` Directory where main tex file is located. Default is : `${CMAKE_CURRENT_SOURCE_DIR}`.
-- `TEXINPUTS` : Directories where other files (tex files, images, classes, etc.) are included from. Default contains current directory (at build time) and LaTex system directories. Should be set as long as main tex file includes other files **AND** you don't execute the build command where the main tex file is located. Or if a tex file includes another file from elsewhere than the main tex file directory. Syntax is : `dir1:dir2:...`
+- `TEXINPUTS` : Directories where other files (tex files, images, classes, etc.) are included from. Default contains current directory (at build time) and LaTeX system directories. Should be set as long as main tex file includes other files **AND** you don't execute the build command where the main tex file is located. Or if a tex file includes another file from elsewhere than the main tex file directory. Syntax is : `dir1:dir2:...`
 - `SUBDIRS` : Directories where other tex files are located. Should be a relative path from a `TEXINPUTS` location. The purpose of this flag is to create a build tree that correspond to the source tree. For example, if a tex file contains this `\include{chapters/chapter2}`, add `chapters` to subdirs.
 - `REGISTER_TO` : Append output pdf file to var. To the tex file to be compiled, at least one target must `DEPENDS` on its output file. Avoid making more than one target `DEPENDS` on one output pdf file, instead create dependencies between other dependant targets and the one that wraps the tex file compilation.
-- `DEPENDS` : By default a rebuild of the LaTeX document is triggerd only if the main tex file is newer than the output file. This argument let's you trigger a rebuild on additional input files' timestamp.
-- `SHELL_ESCAPE` : Append `--shell-escape` to the LaTex compiler.
-- `MINTED` : Use it only if you use the LaTex package Minted **AND** you override `DESTINATION`. Defines `\mintedoutputdir` to set the Minted package argument `outputdir`. So you can include Minted this way : `\usepackage[outputdir=\mintedoutputdir]{minted}`.
+- `DEPENDS` : By default a rebuild of the LaTeX document is triggered only if the main tex file is newer than the output file. This argument lets you trigger a rebuild on additional input files' timestamp.
+- `SHELL_ESCAPE` : Append `--shell-escape` to the LaTeX compiler.
+- `MINTED` : Use it only if you use the LaTeX package Minted **AND** you override `DESTINATION`. Defines `\mintedoutputdir` to set the Minted package argument `outputdir`. So you can include Minted this way : `\usepackage[outputdir=\mintedoutputdir]{minted}`.
 
 ### LibFuzzer
 
