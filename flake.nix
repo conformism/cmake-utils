@@ -4,7 +4,8 @@
   nixConfig.bash-prompt-suffix = "(cmake-utils) ";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/22.11";
+#    nixpkgs.url = "flake:nixpkgs";
+    nixpkgs.url = "github:NixOS/nixpkgs";
 
     flake-utils.url = "github:numtide/flake-utils";
   };
