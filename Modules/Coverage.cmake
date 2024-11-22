@@ -98,14 +98,14 @@ if( COVERAGE OR CMAKE_BUILD_TYPE MATCHES Coverage )
 
 	find_package( Catch2 3.0.0 REQUIRED )
 	if( Catch2_FOUND )
-		message( STATUS "Found Catch2: ${Catch2_VERSION}" )
+		message( STATUS "Found Catch2: ${Catch2_DIR} ${Catch2_VERSION}" )
 	endif()
 
 else()
 
 	find_package( Catch2 3.0.0 QUIET )
 	if( Catch2_FOUND )
-		message( STATUS "Found Catch2: ${Catch2_VERSION}" )
+		message( STATUS "Found Catch2: ${Catch2_DIR} ${Catch2_VERSION}" )
 	else()
 		message( STATUS "Not found Catch2 >= 3.0.0: unittest targets disabled" )
 	endif()
