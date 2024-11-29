@@ -43,7 +43,7 @@ endif()
 #       Append output pdf file to var. To the tex file to be compiled, at least
 #       one target must DEPENDS on its output file. Avoid making more than one
 #       target DEPENDS on one output pdf file, instead create dependencies
-#       between other dependant targets and the one that wraps the tex file
+#       between other dependent targets and the one that wraps the tex file
 #       compilation.
 # [DEPENDS]
 #       By default a rebuild of the LaTeX document is triggerd only if the main

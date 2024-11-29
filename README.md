@@ -22,6 +22,7 @@ You can include it using [Nix](https://nixos.org/), [CPM](https://github.com/cpm
 - [Clang-Tidy](https://clang.llvm.org/extra/clang-tidy/)
 - [CodeChecker](https://github.com/Ericsson/codechecker) ([Clang-Static-Analyzer](https://clang-analyzer.llvm.org/))
 - LaTeX (works with XeLaTeX compiler, [minted](https://www.ctan.org/pkg/minted) & [tikz](https://www.ctan.org/pkg/pgf) packages)
+- Icon utils (based on [CairoSVG](https://cairosvg.org/) and [ImageMagick](https://imagemagick.org))
 - [LibFuzzer](https://www.llvm.org/docs/LibFuzzer.html)
 - Sanitizers
 - [Lcov](http://ltp.sourceforge.net/coverage/lcov.php) / [Llvm-cov](https://clang.llvm.org/docs/SourceBasedCodeCoverage.html) / [Gcovr](https://github.com/gcovr/gcovr) (works with [Catch2](https://github.com/catchorg/Catch2), with [SonarQube](https://www.sonarqube.org/) / [SonarCloud](https://sonarcloud.io) integration)
@@ -164,6 +165,7 @@ set( CMAKE_UTILS
 	COVERAGE
 	CPPCHECK
 	DOXYGEN
+	ICON
 	IWYU
 	LATEX
 	LIBFUZZER
@@ -357,6 +359,37 @@ doxygen(
 - `ARGS_COVERXYGEN` : Specify Coverxygen command line arguments. `--src-dir` is required.
 - `EXCLUDE_FROM_ALL` : Exclude the Doxygen target from global call to `dox` target.
 
+### Icon
+
+```cmake
+svg_to_png( <name>
+	DESTINATION <destination_dir>
+	SOURCE <source_dir>
+	SIZE <size>
+	REGISTER_TO <var>
+	)
+```
+
+- `DESTINATION` : Directory where output png file is created. Default is : `${CMAKE_CURRENT_BINARY_DIR}`.
+- `SOURCE` : Directory where input svg file is located. Default is : `${CMAKE_CURRENT_SOURCE_DIR}`.
+- `SIZE` : Desired output size in pixels. Both formats `<size>` and `<width>x<height>` are accepted.
+- `REGISTER_TO` : Append output png file to var. To the png file to be compiled, at least one target must DEPENDS on its output file. Avoid making more than one target DEPENDS on one output pdf file, instead create dependencies between other dependent targets and the one that wraps the png file compilation.
+
+```cmake
+png_to_ico( <name>
+	DESTINATION <destination_dir>
+	INPUT
+		<file1>
+		<...>
+	REGISTER_TO <var>
+	)
+```
+
+- `DESTINATION` : Directory where output ico file is created. Default is : `${CMAKE_CURRENT_BINARY_DIR}`.
+- `INPUT` : Input png files to combine in an ico file, typically multiple sizes of of the same image. Inclusion order seems to matter when using the file as an icon.
+- `REGISTER_TO` : Append output ico file to var. To the ico file to be compiled, at least one target must DEPENDS on its output file. Avoid making more than one target DEPENDS on one output pdf file, instead create dependencies between other dependent targets and the one that wraps the ico file compilation.
+
+
 ### IncludeWhatYouUse
 
 ```cmake
@@ -402,7 +435,7 @@ compile_latex_file( <name>
 - `SOURCE` Directory where main tex file is located. Default is : `${CMAKE_CURRENT_SOURCE_DIR}`.
 - `TEXINPUTS` : Directories where other files (tex files, images, classes, etc.) are included from. Default contains current directory (at build time) and LaTeX system directories. Should be set as long as main tex file includes other files **AND** you don't execute the build command where the main tex file is located. Or if a tex file includes another file from elsewhere than the main tex file directory. Syntax is : `dir1:dir2:...`
 - `SUBDIRS` : Directories where other tex files are located. Should be a relative path from a `TEXINPUTS` location. The purpose of this flag is to create a build tree that correspond to the source tree. For example, if a tex file contains this `\include{chapters/chapter2}`, add `chapters` to subdirs.
-- `REGISTER_TO` : Append output pdf file to var. To the tex file to be compiled, at least one target must `DEPENDS` on its output file. Avoid making more than one target `DEPENDS` on one output pdf file, instead create dependencies between other dependant targets and the one that wraps the tex file compilation.
+- `REGISTER_TO` : Append output pdf file to var. To the tex file to be compiled, at least one target must `DEPENDS` on its output file. Avoid making more than one target `DEPENDS` on one output pdf file, instead create dependencies between other dependent targets and the one that wraps the tex file compilation.
 - `DEPENDS` : By default a rebuild of the LaTeX document is triggered only if the main tex file is newer than the output file. This argument lets you trigger a rebuild on additional input files' timestamp.
 - `SHELL_ESCAPE` : Append `--shell-escape` to the LaTeX compiler.
 - `MINTED` : Use it only if you use the LaTeX package Minted **AND** you override `DESTINATION`. Defines `\mintedoutputdir` to set the Minted package argument `outputdir`. So you can include Minted this way : `\usepackage[outputdir=\mintedoutputdir]{minted}`.

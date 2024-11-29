@@ -43,6 +43,7 @@
           with-coverage = true;
           with-cppcheck = true;
           with-doxygen = true;
+          with-icon = true;
           with-include-what-you-use = true;
           with-lizard = true;
           with-m-css = true;

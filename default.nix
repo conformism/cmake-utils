@@ -2,6 +2,7 @@
 , callPackage
 , stdenv
 , stdenvNoCC
+, cairosvg
 , catch2_3
 , clang
 , clang-build-analyzer
@@ -13,6 +14,7 @@
 , editorconfig-checker
 , gcovr
 , git
+, imagemagick
 , include-what-you-use
 , lcov
 , lizard
@@ -27,6 +29,7 @@
 , with-coverage ? false
 , with-cppcheck ? false
 , with-doxygen ? false
+, with-icon ? false
 , with-include-what-you-use ? false
 , with-lizard ? false
 , with-m-css ? false
@@ -62,6 +65,9 @@
     doxygen
   ] ++ lib.optionals (with-doxygen && with-m-css) [
     m-css
+  ] ++ lib.optionals with-icon [
+    cairosvg
+    imagemagick
   ] ++ lib.optionals with-include-what-you-use [
     include-what-you-use
   ] ++ lib.optionals with-lizard [
