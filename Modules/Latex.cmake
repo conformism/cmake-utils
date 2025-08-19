@@ -1,8 +1,10 @@
 find_package( LATEX COMPONENTS XELATEX )
 
 if( XELATEX_COMPILER )
+	set( CMakeUtils_Latex_FOUND ON )
 	message( STATUS "Found xelatex: ${XELATEX_COMPILER}" )
 else()
+	set( CMakeUtils_Latex_FOUND OFF )
 	message( FATAL_ERROR "Not found xelatex: install it" )
 endif()
 

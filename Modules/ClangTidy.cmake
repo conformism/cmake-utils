@@ -1,9 +1,11 @@
 find_program( CLANG_TIDY NAMES clang-tidy )
 if( CLANG_TIDY )
+	set( CMakeUtils_ClangTidy_FOUND ON )
 	message( STATUS "Found Clang-Tidy: ${CLANG_TIDY}" )
 	add_custom_target( tidy )
 	add_custom_target( tidy_fix )
 else()
+	set( CMakeUtils_ClangTidy_FOUND OFF )
 	message( STATUS "Not found Clang-Tidy: tidy targets disabled" )
 endif()
 

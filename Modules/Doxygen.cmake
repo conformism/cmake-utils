@@ -5,6 +5,7 @@ find_program( PLANTUML NAMES plantuml )
 find_program( GENHTML NAMES genhtml )
 
 if( DOXYGEN )
+	set( CMakeUtils_Doxygen_FOUND ON )
 	message( STATUS "Found doxygen: ${DOXYGEN}" )
 	add_custom_target( dox )
 

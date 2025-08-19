@@ -2,14 +2,20 @@ find_program( CAIROSVG NAMES cairosvg )
 if( CAIROSVG )
 	message( STATUS "Found Cairosvg: ${CAIROSVG}" )
 else()
-	message( FATAL_ERROR "Not found Cairosvg: install it" )
+	message( STATUS "Not found Cairosvg: icon utils disabled" )
 endif()
 
 find_program( MAGICK NAMES magick convert )
 if( MAGICK )
 	message( STATUS "Found ImageMagick: ${MAGICK}" )
 else()
-	message( FATAL_ERROR "Not found ImageMagick: install it" )
+	message( STATUS "Not found ImageMagick: icon utils disabled" )
+endif()
+
+if( CAIROSVG AND MAGICK )
+	set( CMakeUtils_Icon_FOUND ON )
+else()
+	set( CMakeUtils_Icon_FOUND OFF )
 endif()
 
 mark_as_advanced( CAIROSVG )
@@ -49,40 +55,42 @@ function( svg_to_png NAME )
 		${ARGN}
 		)
 
-	if( NOT SVG2PNG_SOURCE )
-		set( SVG2PNG_SOURCE "${CMAKE_CURRENT_SOURCE_DIR}" )
-	endif()
-	if( NOT SVG2PNG_DESTINATION )
-		set( SVG2PNG_DESTINATION "${CMAKE_CURRENT_BINARY_DIR}" )
-	endif()
-	if( SVG2PNG_SIZE )
-		if( SVG2PNG_SIZE MATCHES "^([0-9]+)x([0-9])")
-			set( SVG2PNG_SIZE_W --output-width ${CMAKE_MATCH_1} )
-			set( SVG2PNG_SIZE_H --output-height ${CMAKE_MATCH_2} )
-		else()
-			set( SVG2PNG_SIZE_W --output-width ${SVG2PNG_SIZE} )
-			set( SVG2PNG_SIZE_H --output-height ${SVG2PNG_SIZE} )
+	if( CAIROSVG )
+		if( NOT SVG2PNG_SOURCE )
+			set( SVG2PNG_SOURCE "${CMAKE_CURRENT_SOURCE_DIR}" )
 		endif()
-	endif()
+		if( NOT SVG2PNG_DESTINATION )
+			set( SVG2PNG_DESTINATION "${CMAKE_CURRENT_BINARY_DIR}" )
+		endif()
+		if( SVG2PNG_SIZE )
+			if( SVG2PNG_SIZE MATCHES "^([0-9]+)x([0-9])")
+				set( SVG2PNG_SIZE_W --output-width ${CMAKE_MATCH_1} )
+				set( SVG2PNG_SIZE_H --output-height ${CMAKE_MATCH_2} )
+			else()
+				set( SVG2PNG_SIZE_W --output-width ${SVG2PNG_SIZE} )
+				set( SVG2PNG_SIZE_H --output-height ${SVG2PNG_SIZE} )
+			endif()
+		endif()
 
-	add_custom_command(
-		OUTPUT "${SVG2PNG_DESTINATION}/${NAME}.${SVG2PNG_SIZE}.png"
-		DEPENDS "${SVG2PNG_SOURCE}/${NAME}.svg"
-		COMMAND ${CAIROSVG}
-			"${SVG2PNG_SOURCE}/${NAME}.svg"
-			-o "${SVG2PNG_DESTINATION}/${NAME}.${SVG2PNG_SIZE}.png"
-			${SVG2PNG_SIZE_W}
-			${SVG2PNG_SIZE_H}
-		)
+		add_custom_command(
+			OUTPUT "${SVG2PNG_DESTINATION}/${NAME}.${SVG2PNG_SIZE}.png"
+			DEPENDS "${SVG2PNG_SOURCE}/${NAME}.svg"
+			COMMAND ${CAIROSVG}
+				"${SVG2PNG_SOURCE}/${NAME}.svg"
+				-o "${SVG2PNG_DESTINATION}/${NAME}.${SVG2PNG_SIZE}.png"
+				${SVG2PNG_SIZE_W}
+				${SVG2PNG_SIZE_H}
+			)
 
-	if( SVG2PNG_REGISTER_TO )
-		list( APPEND "${SVG2PNG_REGISTER_TO}"
-			"${SVG2PNG_DESTINATION}/${NAME}.${SVG2PNG_SIZE}.png"
-			)
-		set( "${SVG2PNG_REGISTER_TO}"
-			"${${SVG2PNG_REGISTER_TO}}"
-			PARENT_SCOPE
-			)
+		if( SVG2PNG_REGISTER_TO )
+			list( APPEND "${SVG2PNG_REGISTER_TO}"
+				"${SVG2PNG_DESTINATION}/${NAME}.${SVG2PNG_SIZE}.png"
+				)
+			set( "${SVG2PNG_REGISTER_TO}"
+				"${${SVG2PNG_REGISTER_TO}}"
+				PARENT_SCOPE
+				)
+		endif()
 	endif()
 endfunction()
 
@@ -117,28 +125,30 @@ function( png_to_ico NAME )
 		${ARGN}
 		)
 
-	if( NOT PNG2ICO_INPUT )
-		message( FATAL_ERROR "Specify inputs!" )
-	endif()
-	if( NOT PNG2ICO_DESTINATION )
-		set( PNG2ICO_DESTINATION "${CMAKE_CURRENT_BINARY_DIR}" )
-	endif()
+	if( MAGICK )
+		if( NOT PNG2ICO_INPUT )
+			message( FATAL_ERROR "Specify inputs!" )
+		endif()
+		if( NOT PNG2ICO_DESTINATION )
+			set( PNG2ICO_DESTINATION "${CMAKE_CURRENT_BINARY_DIR}" )
+		endif()
 
-	add_custom_command(
-		OUTPUT "${PNG2ICO_DESTINATION}/${NAME}.ico"
-		DEPENDS ${PNG2ICO_INPUT}
-		COMMAND ${MAGICK}
-			${PNG2ICO_INPUT}
-			"${PNG2ICO_DESTINATION}/${NAME}.ico"
-		)
+		add_custom_command(
+			OUTPUT "${PNG2ICO_DESTINATION}/${NAME}.ico"
+			DEPENDS ${PNG2ICO_INPUT}
+			COMMAND ${MAGICK}
+				${PNG2ICO_INPUT}
+				"${PNG2ICO_DESTINATION}/${NAME}.ico"
+			)
 
-	if( PNG2ICO_REGISTER_TO )
-		list( APPEND "${PNG2ICO_REGISTER_TO}"
-			"${PNG2ICO_DESTINATION}/${NAME}.ico"
-			)
-		set( "${PNG2ICO_REGISTER_TO}"
-			"${${PNG2ICO_REGISTER_TO}}"
-			PARENT_SCOPE
-			)
+		if( PNG2ICO_REGISTER_TO )
+			list( APPEND "${PNG2ICO_REGISTER_TO}"
+				"${PNG2ICO_DESTINATION}/${NAME}.ico"
+				)
+			set( "${PNG2ICO_REGISTER_TO}"
+				"${${PNG2ICO_REGISTER_TO}}"
+				PARENT_SCOPE
+				)
+		endif()
 	endif()
 endfunction()

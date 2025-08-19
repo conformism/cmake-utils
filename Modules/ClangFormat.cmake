@@ -1,9 +1,11 @@
 find_program( CLANG_FORMAT NAMES clang-format )
 if( CLANG_FORMAT )
+	set( CMakeUtils_ClangFormat_FOUND ON )
 	message( STATUS "Found Clang-Format: ${CLANG_FORMAT}" )
 	add_custom_target( format )
 	add_custom_target( format_fix )
 else()
+	set( CMakeUtils_ClangFormat_FOUND OFF )
 	message( STATUS "Not found Clang-Format: format targets disabled" )
 endif()
 

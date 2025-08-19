@@ -1,10 +1,13 @@
 if( LIBFUZZER )
+	set( CMakeUtils_Libfuzzer_FOUND ON )
 	if( NOT CMAKE_CXX_COMPILER_ID MATCHES Clang )
 		message( FATAL_ERROR "LibFuzzer is a LLVM feature: use Clang!" )
 	elseif( NOT SANITIZER )
 		message( WARNING "Fuzzing without a sanitizer is of limited use" )
 	endif()
 	add_custom_target( fuzz )
+else()
+	set( CMakeUtils_Libfuzzer_FOUND OFF )
 endif()
 
 ################################################################################

@@ -1,8 +1,10 @@
 find_program( CPPCHECK NAMES cppcheck )
 if( CPPCHECK )
+	set( CMakeUtils_Cppcheck_FOUND ON )
 	message( STATUS "Found Cppcheck: ${CPPCHECK}" )
 	add_custom_target( cppcheck )
 else()
+	set( CMakeUtils_Cppcheck_FOUND OFF )
 	message( STATUS "Not found Cppcheck: cppcheck targets disabled" )
 endif()
 

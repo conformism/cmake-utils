@@ -12,7 +12,10 @@ else()
 endif()
 
 if( IWYU AND IWYU_TOOL )
+	set( CMakeUtils_IWYU_FOUND ON )
 	add_custom_target( iwyu )
+else()
+	set( CMakeUtils_IWYU_FOUND OFF )
 endif()
 
 mark_as_advanced( IWYU )

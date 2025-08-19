@@ -17,6 +17,8 @@ else()
 	message( FATAL_ERROR "Invalid sanitizer: ${SANITIZER}" )
 endif()
 
+set( CMakeUtils_Sanitizer_FOUND ON )
+
 ################################################################################
 # enable_sanitizers(
 #                   [TARGET target]

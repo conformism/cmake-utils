@@ -1,8 +1,10 @@
 find_program( LIZARD NAMES lizard )
 if( LIZARD )
+	set( CMakeUtils_Lizard_FOUND ON )
 	message( STATUS "Found Lizard: ${LIZARD}" )
 	add_custom_target( lizard )
 else()
+	set( CMakeUtils_Lizard_FOUND OFF )
 	message( STATUS "Not found Lizard: lizard targets disabled" )
 endif()
 

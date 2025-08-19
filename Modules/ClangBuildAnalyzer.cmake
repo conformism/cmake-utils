@@ -1,5 +1,6 @@
 find_program( CLANG_BUILD_ANALYZER NAMES ClangBuildAnalyzer clang-build-analyzer )
 if( CLANG_BUILD_ANALYZER )
+	set( CMakeUtils_ClangBuildAnalyzer_FOUND ON )
 	message( STATUS "Found ClangBuildAnalyzer: ${CLANG_BUILD_ANALYZER}" )
 	if( BUILD_ANALYZER AND CMAKE_CXX_COMPILER_ID MATCHES Clang )
 		add_custom_target( build_analyzer
@@ -16,6 +17,7 @@ if( CLANG_BUILD_ANALYZER )
 		message( FATAL_ERROR "ClangBuildAnalyzer relies on Clang: use Clang!" )
 	endif()
 else()
+	set( CMakeUtils_ClangBuildAnalyzer_FOUND OFF )
 	message( STATUS "Not found ClangBuildAnalyzer: build_analyzer targets disabled" )
 endif()
 
